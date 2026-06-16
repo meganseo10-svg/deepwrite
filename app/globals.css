@@ -1,26 +1,74 @@
 @import "tailwindcss";
+/* 웹폰트(Pretendard + JetBrains Mono, 08 §3)는 app/layout.tsx 의 <link> 로 로드 */
+
+/*
+  DEEPREAD 디자인 토큰 (specs/08_DEEPREAD_DESIGN_TOKENS.md 에서 추출).
+  deepread는 Vite+React+CSS라 복사할 tailwind.config가 없으므로,
+  Tailwind v4 @theme 으로 동일 값 재현.
+*/
+@theme {
+  /* 컬러 팔레트 */
+  --color-paper: #f2faf6;
+  --color-paper2: #fbfffd;
+  --color-card: #ffffff;
+  --color-ink: #243239;
+  --color-soft: #5e6e73;
+  --color-faint: #9baaae;
+  --color-line: #e4efeb;
+  --color-line2: #d2e3dd;
+  --color-ox: #0eb5a6; /* 브랜드 강조색 (청록) */
+  --color-ox-dark: #0a9a8c; /* hover */
+  --color-gold: #ff8a3d; /* 경고/포인트 (작문 앱 보조 액센트) */
+  --color-sage: #22c55e; /* 성공 */
+  --color-slate: #2db6f5; /* 정보 */
+
+  /* 라운드 */
+  --radius-badge: 8px;
+  --radius-btn: 11px;
+  --radius-card: 14px;
+
+  /* 그림자 */
+  --shadow-card: 0 12px 28px -18px rgba(20, 70, 62, 0.2);
+
+  /* 타이포 */
+  --font-sans:
+    "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Pretendard", monospace;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 하이라이트 (08 §2) — 토큰 외 값 */
+  --hl-word: rgba(14, 181, 166, 0.15);
+  --hl-sent: rgba(45, 182, 245, 0.1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    font-family: var(--font-sans);
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    line-height: 1.6;
+    letter-spacing: -0.005em;
+    -webkit-font-smoothing: antialiased;
+    /* 한국어 줄바꿈 — 어절 단위로 깔끔하게 (08 §3) */
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 브랜드 그라데이션 (08 §2) */
+@utility bg-brand {
+  background-image: linear-gradient(135deg, #13cca8 0%, #2da8f5 100%);
+}
+@utility bg-brand2 {
+  background-image: linear-gradient(135deg, #ffb020 0%, #ff7a59 100%);
+}
+@utility text-brand {
+  background-image: linear-gradient(135deg, #13cca8 0%, #2da8f5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
