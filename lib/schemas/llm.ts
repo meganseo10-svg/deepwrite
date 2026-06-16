@@ -53,6 +53,16 @@ export const AnalyzeSchema = z.object({
   weaknesses: z.array(WeaknessSchema),
 });
 
+// 요청 스키마 (POST /api/tone) — 문장 또는 짧은 단락
+export const ToneRequestSchema = z.object({
+  text: z.string().min(1).max(2000),
+});
+
+// 요청 스키마 (POST /api/tone/consistency) — 글 전체
+export const ConsistencyRequestSchema = z.object({
+  text: z.string().min(1).max(8000),
+});
+
 // ── §2. 3톤 동시 변환 ──
 export const ToneVersionsSchema = z.object({
   formal: z.string(),

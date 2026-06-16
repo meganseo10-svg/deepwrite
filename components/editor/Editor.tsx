@@ -8,10 +8,16 @@ import { ToneSelector } from "@/components/tone/ToneSelector";
 import { AnalysisPanel, type AnalysisResult } from "@/components/editor/AnalysisPanel";
 import { HintPopover } from "@/components/editor/HintPopover";
 import { CompareCard } from "@/components/editor/CompareCard";
+import { ThreeToneCompare } from "@/components/tone/ThreeToneCompare";
 import { PlanLock } from "@/components/ui/PlanLock";
 import { updateWritingPrefs } from "@/app/(app)/write/actions";
 import { HINT_MODE_OPTIONS, type HintMode, type Tone } from "@/lib/constants";
-import type { Collocation, Compare } from "@/lib/schemas/llm";
+import type {
+  Collocation,
+  Compare,
+  Consistency,
+  ToneResult,
+} from "@/lib/schemas/llm";
 import { cn } from "@/lib/utils";
 
 const WORD_ONLY_RE = /^[A-Za-z][A-Za-z'-]{1,}$/; // 선택영역이 단어 하나일 때
@@ -53,6 +59,15 @@ export function Editor({
   const [compareLoading, setCompareLoading] = useState(false);
   const [compareLocked, setCompareLocked] = useState(false);
   const compareReq = useRef(0);
+
+  // 3톤 동시 변환 (§2)
+  const [toneResult, setToneResult] = useState<ToneResult | null>(null);
+  const [toneLoading, setToneLoading] = useState(false);
+  const [toneLocked, setToneLocked] = useState(false); // free/basic 미리보기 소진
+  const [toneError, setToneError] = useState<string | null>(null);
+  const [consistency, setConsistency] = useState<Consistency | null>(null);
+  const [consistencyLoading, setConsistencyLoading] = useState(false);
+  const toneReq = useRef(0);
 
   const taRef = useRef<HTMLTextAreaElement>(null);
 
@@ -193,6 +208,59 @@ export function Editor({
     }
   }
 
+  function closeTone() {
+    setToneResult(null);
+    setToneLocked(false);
+    setToneError(null);
+    setConsistency(null);
+  }
+
+  async function compareTones() {
+    const id = ++toneReq.current;
+    setToneError(null);
+    setToneLocked(false);
+    setConsistency(null);
+    setToneResult(null);
+    setToneLoading(true);
+    try {
+      const res = await fetch("/api/tone", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      if (id !== toneReq.current) return;
+      const data = await res.json();
+      if (res.ok) {
+        setToneResult(data as ToneResult);
+      } else if (data?.error?.code === "PLAN_REQUIRED") {
+        setToneLocked(true);
+      } else {
+        setToneError(data?.error?.message ?? "3톤 변환에 실패했습니다.");
+      }
+    } catch {
+      if (id === toneReq.current) setToneError("네트워크 오류로 실패했습니다.");
+    } finally {
+      if (id === toneReq.current) setToneLoading(false);
+    }
+  }
+
+  async function checkConsistency() {
+    setConsistencyLoading(true);
+    try {
+      const res = await fetch("/api/tone/consistency", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      const data = await res.json();
+      if (res.ok) setConsistency(data as Consistency);
+    } catch {
+      /* 일관성 검사 실패는 조용히 무시 */
+    } finally {
+      setConsistencyLoading(false);
+    }
+  }
+
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
   const leftPane = (
@@ -263,7 +331,14 @@ export function Editor({
             </div>
           ) : null)}
 
-        <div className="flex justify-end">
+        <div className="flex flex-wrap justify-end gap-2">
+          <Button
+            variant="secondary"
+            disabled={!text.trim() || toneLoading}
+            onClick={compareTones}
+          >
+            {toneLoading ? "변환 중…" : "3톤으로 비교"}
+          </Button>
           <Button disabled={!text.trim() || analyzing} onClick={analyze}>
             {analyzing ? "진단 중…" : "진단받기"}
           </Button>
@@ -338,6 +413,31 @@ export function Editor({
           {rightPane}
         </div>
       </div>
+
+      {/* 3톤 비교 — 전체 너비 확장 패널 (06 화면2) */}
+      {toneError && (
+        <Card>
+          <CardBody className="flex items-center justify-between gap-3 py-3">
+            <span className="text-sm text-gold">{toneError}</span>
+            <Button variant="secondary" size="sm" onClick={compareTones}>
+              다시 시도
+            </Button>
+          </CardBody>
+        </Card>
+      )}
+      {toneLocked && (
+        <PlanLock feature="3톤 비교" onClose={closeTone} />
+      )}
+      {toneResult && (
+        <ThreeToneCompare
+          data={toneResult}
+          onClose={closeTone}
+          isPro={isPro}
+          consistency={consistency}
+          consistencyLoading={consistencyLoading}
+          onCheckConsistency={checkConsistency}
+        />
+      )}
     </div>
   );
 }
