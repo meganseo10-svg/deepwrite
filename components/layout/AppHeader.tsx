@@ -42,6 +42,12 @@ export async function AppHeader() {
             역번역
           </Link>
           <Link
+            href="/expressions"
+            className="rounded-badge px-3 py-1.5 text-soft hover:bg-paper2 hover:text-ink"
+          >
+            표현장
+          </Link>
+          <Link
             href="/weakness"
             className="rounded-badge px-3 py-1.5 text-soft hover:bg-paper2 hover:text-ink"
           >

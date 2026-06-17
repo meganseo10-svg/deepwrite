@@ -9,6 +9,7 @@ const PROTECTED_PREFIXES = [
   "/backtranslate",
   "/weakness",
   "/onboarding",
+  "/expressions",
 ];
 
 /**
