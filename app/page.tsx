@@ -92,8 +92,9 @@ export default async function LandingPage() {
             <a
               href={DEEPREAD_URL}
               className="rounded-badge px-3 py-1.5 text-ox-dark hover:bg-ox/10"
+              title="읽기 트레이너 DEEPREAD로 이동"
             >
-              DEEPREAD
+              읽기는 DEEPREAD ↗
             </a>
             <Link href={ctaHref}>
               <Button size="sm">{loggedIn ? "대시보드" : "로그인"}</Button>
@@ -119,15 +120,10 @@ export default async function LandingPage() {
             그리고 말투까지. 마음에 든 표현은 드래그 한 번으로 쏙 — 잊어버릴
             때쯤 알아서 다시 꺼내 복습시켜 드릴게요.
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-8 flex items-center justify-center">
             <Link href={ctaHref}>
-              <Button className="px-6">{ctaLabel}</Button>
+              <Button className="px-7">{ctaLabel}</Button>
             </Link>
-            <a href={DEEPREAD_URL}>
-              <Button variant="secondary" className="px-6">
-                읽기는 DEEPREAD에서
-              </Button>
-            </a>
           </div>
           <p className="mt-4 text-xs text-faint">
             부담 없이 시작하세요. 진단·3톤 비교·역번역·약점 리포트까지, 일단 다

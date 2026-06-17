@@ -7,18 +7,18 @@
   Tailwind v4 @theme 으로 동일 값 재현.
 */
 @theme {
-  /* 컬러 팔레트 */
-  --color-paper: #f2faf6;
-  --color-paper2: #fbfffd;
+  /* 컬러 팔레트 — DEEPWRITE: 인디고·보라 (deepread=청록과 형제이되 다른 색) */
+  --color-paper: #f6f5fe; /* 보라빛 화이트 */
+  --color-paper2: #fcfbff;
   --color-card: #ffffff;
-  --color-ink: #243239;
-  --color-soft: #5e6e73;
-  --color-faint: #9baaae;
-  --color-line: #e4efeb;
-  --color-line2: #d2e3dd;
-  --color-ox: #0eb5a6; /* 브랜드 강조색 (청록) */
-  --color-ox-dark: #0a9a8c; /* hover */
-  --color-gold: #ff8a3d; /* 경고/포인트 (작문 앱 보조 액센트) */
+  --color-ink: #272433;
+  --color-soft: #615d72;
+  --color-faint: #9f9bb0;
+  --color-line: #ece9f7;
+  --color-line2: #ddd8f0;
+  --color-ox: #6366f1; /* 브랜드 강조색 (인디고) */
+  --color-ox-dark: #4f46e5; /* hover */
+  --color-gold: #ff8a3d; /* 경고/포인트 (보조 액센트) */
   --color-sage: #22c55e; /* 성공 */
   --color-slate: #2db6f5; /* 정보 */
 
@@ -28,7 +28,7 @@
   --radius-card: 14px;
 
   /* 그림자 */
-  --shadow-card: 0 12px 28px -18px rgba(20, 70, 62, 0.2);
+  --shadow-card: 0 12px 28px -18px rgba(60, 50, 110, 0.22);
 
   /* 타이포 */
   --font-sans:
@@ -39,7 +39,7 @@
 
 :root {
   /* 하이라이트 (08 §2) — 토큰 외 값 */
-  --hl-word: rgba(14, 181, 166, 0.15);
+  --hl-word: rgba(99, 102, 241, 0.15);
   --hl-sent: rgba(45, 182, 245, 0.1);
 }
 
@@ -59,15 +59,15 @@
   }
 }
 
-/* 브랜드 그라데이션 (08 §2) */
+/* 브랜드 그라데이션 — DEEPWRITE 인디고→보라 */
 @utility bg-brand {
-  background-image: linear-gradient(135deg, #13cca8 0%, #2da8f5 100%);
+  background-image: linear-gradient(135deg, #7c6cff 0%, #a78bfa 100%);
 }
 @utility bg-brand2 {
   background-image: linear-gradient(135deg, #ffb020 0%, #ff7a59 100%);
 }
 @utility text-brand {
-  background-image: linear-gradient(135deg, #13cca8 0%, #2da8f5 100%);
+  background-image: linear-gradient(135deg, #7c6cff 0%, #a78bfa 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
