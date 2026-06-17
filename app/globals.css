@@ -21,6 +21,8 @@
   --color-gold: #ff8a3d; /* 경고/포인트 (보조 액센트) */
   --color-sage: #22c55e; /* 성공 */
   --color-slate: #2db6f5; /* 정보 */
+  --color-read: #0eb5a6; /* 자매 앱 DEEPREAD 청록 (링크/배너에 사용) */
+  --color-read-dark: #0a9a8c;
 
   /* 라운드 */
   --radius-badge: 8px;

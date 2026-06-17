@@ -30,7 +30,7 @@ export default function OpengraphImage() {
           5-dimension English writing trainer
         </div>
         <div style={{ fontSize: 27, marginTop: 30, opacity: 0.82 }}>
-          Lexis · Collocation · Structure · Cohesion · Tone
+          Lexis · Collocation · Structure · Grammar · Tone
         </div>
       </div>
     ),

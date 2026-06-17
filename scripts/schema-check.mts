@@ -17,8 +17,12 @@ const cases: Array<[string, ZodType, unknown]> = [
     "AnalyzeSchema (§1)",
     AnalyzeSchema,
     {
-      scores: { lexis: 70, collocation: 60, structure: 75, cohesion: 80, tone: 65 },
-      rewrite: "I'd like to share my view on this matter.",
+      scores: { lexis: 70, collocation: 60, structure: 75, grammar: 80, tone: 65 },
+      rewrites: {
+        formal: "I would like to share my view on this matter.",
+        neutral: "I'd like to share my view on this matter.",
+        casual: "Lemme share what I think about this.",
+      },
       diff: [
         { op: "replace", before: "say my opinion", after: "share my view" },
         { op: "keep", before: "on this matter" },

@@ -18,7 +18,7 @@ export async function AppHeader() {
     <header className="sticky top-0 z-10 border-b border-line bg-paper/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="flex items-baseline gap-1.5">
+          <Link href="/" className="flex items-baseline gap-1.5">
             <span className="text-lg font-bold tracking-tight text-brand">
               DEEPWRITE
             </span>
@@ -52,7 +52,7 @@ export async function AppHeader() {
           </Link>
           <a
             href={DEEPREAD_URL}
-            className="rounded-badge px-3 py-1.5 text-ox-dark hover:bg-ox/10"
+            className="rounded-badge px-3 py-1.5 font-medium text-read-dark hover:bg-read/10"
           >
             ← DEEPREAD로
           </a>

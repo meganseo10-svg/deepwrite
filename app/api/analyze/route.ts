@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   const parsed = AnalyzeRequestSchema.safeParse(body);
   if (!parsed.success)
     return apiError("INVALID_INPUT", "입력이 올바르지 않습니다.", 400);
-  const { text, tone, genre } = parsed.data;
+  const { text, genre } = parsed.data;
 
   // 플랜 게이트: free 는 1일 3회 (RLS 덕에 본인 글만 카운트됨)
   const { data: profile } = await supabase
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     result = await generateJSON({
       model: MODELS.heavy,
       system: SYSTEM_ANALYZE,
-      user: userAnalyze(text, tone, genre),
+      user: userAnalyze(text, genre),
       schema: AnalyzeSchema,
       thinking: true,
       maxTokens: 8000,
@@ -74,9 +74,9 @@ export async function POST(req: Request) {
     .insert({
       user_id: user.id,
       genre: genre ?? null,
-      target_tone: tone,
+      target_tone: "neutral", // 톤 미선택 — 중립 리라이트를 기준으로 저장
       source_text: text,
-      rewrite_text: result.rewrite,
+      rewrite_text: result.rewrites.neutral,
       scores: result.scores,
       diff: result.diff,
       explanations: result.explanations,
@@ -102,7 +102,7 @@ export async function POST(req: Request) {
   return NextResponse.json({
     writingId: writing.id,
     scores: result.scores,
-    rewrite: result.rewrite,
+    rewrites: result.rewrites,
     diff: result.diff,
     explanations: result.explanations,
   });

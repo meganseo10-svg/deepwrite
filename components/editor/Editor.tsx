@@ -4,7 +4,6 @@ import { useRef, useState, useTransition } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card, CardBody } from "@/components/ui/Card";
 import { Segmented } from "@/components/editor/Segmented";
-import { ToneSelector } from "@/components/tone/ToneSelector";
 import { AnalysisPanel, type AnalysisResult } from "@/components/editor/AnalysisPanel";
 import { HintPopover } from "@/components/editor/HintPopover";
 import { CompareCard } from "@/components/editor/CompareCard";
@@ -35,7 +34,8 @@ export function Editor({
   canSave: boolean;
   isPro: boolean; // 비교 단어 카드 Pro 게이트
 }) {
-  const [tone, setTone] = useState<Tone>(initialTone);
+  // 톤은 더 이상 작문 단계에서 고르지 않음(진단이 3톤 제공). 라이브 힌트 정렬용 기본값으로만 사용.
+  const tone = initialTone;
   const [hintMode, setHintMode] = useState<HintMode>(initialHintMode);
   const [text, setText] = useState("");
   const [mobileTab, setMobileTab] = useState<"write" | "analysis">("write");
@@ -194,7 +194,7 @@ export function Editor({
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, tone }),
+        body: JSON.stringify({ text }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -280,16 +280,13 @@ export function Editor({
   const leftPane = (
     <Card>
       <CardBody className="space-y-4 pt-5">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <ToneSelector
-            value={tone}
-            onChange={(t) => {
-              setTone(t);
-              persist({ tone: t });
-            }}
-          />
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-xs text-soft">
+            톤은 고르지 않아도 돼요. 진단하면 격식·중립·구어 3가지로 다시 써
+            드립니다.
+          </p>
           {canSave && (
-            <span className="text-xs text-faint">
+            <span className="shrink-0 text-xs text-faint">
               {pending ? "저장 중…" : saved ? "저장됨 ✓" : ""}
             </span>
           )}

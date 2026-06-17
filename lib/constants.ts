@@ -37,8 +37,8 @@ export const SCORE_DIMS = [
   { key: "lexis", label: "어휘" },
   { key: "collocation", label: "콜로케이션" },
   { key: "structure", label: "문장 구조" },
-  { key: "cohesion", label: "응집" },
-  { key: "tone", label: "톤 일치" },
+  { key: "grammar", label: "문법" },
+  { key: "tone", label: "톤" },
 ] as const;
 
 export function scoreDimLabel(key: string): string {
@@ -49,13 +49,13 @@ type ScoreSet = {
   lexis: number;
   collocation: number;
   structure: number;
-  cohesion: number;
+  grammar: number;
   tone: number;
 };
 
 // 5차원 평균(0~100 정수). ScoreBars·dashboard 공용.
 export function avgScore(s: ScoreSet): number {
-  const v = [s.lexis, s.collocation, s.structure, s.cohesion, s.tone];
+  const v = [s.lexis, s.collocation, s.structure, s.grammar, s.tone];
   return Math.round(v.reduce((a, b) => a + b, 0) / v.length);
 }
 

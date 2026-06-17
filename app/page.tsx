@@ -15,7 +15,7 @@ const STEPS = [
   {
     n: "2",
     title: "빠짐없는 5차원 진단",
-    desc: "어휘·콜로케이션·구조·응집·톤을 점수로, 네이티브 리라이트와 이유까지 한 번에.",
+    desc: "어휘·콜로케이션·구조·문법·톤을 점수로, 3톤 네이티브 리라이트와 이유까지 한 번에.",
   },
   {
     n: "3",
@@ -33,7 +33,7 @@ const FEATURES = [
   {
     icon: "📊",
     title: "빠짐없는 5차원 진단",
-    desc: "한 문장도 대충 넘기지 않아요. 어휘·콜로케이션·구조·응집·톤을 점수로 보여주고, 왜 그렇게 써야 하는지 이유·규칙·빈도까지 설명해요.",
+    desc: "한 문장도 대충 넘기지 않아요. 어휘·콜로케이션·구조·문법·톤을 점수로 보여주고, 왜 그렇게 써야 하는지 이유·규칙·빈도까지 설명해요. 톤은 고를 필요 없이 격식·중립·구어 3가지로 리라이트해 드려요.",
   },
   {
     icon: "💡",
@@ -107,7 +107,7 @@ export default async function LandingPage() {
             </div>
             <a
               href={DEEPREAD_URL}
-              className="rounded-badge px-3 py-1.5 text-ox-dark hover:bg-ox/10"
+              className="rounded-badge px-3 py-1.5 font-medium text-read-dark hover:bg-read/10"
               title="읽기 트레이너 DEEPREAD로 이동"
             >
               읽기는 DEEPREAD ↗
@@ -279,7 +279,7 @@ export default async function LandingPage() {
             Made by Megan, Seo · <span className="font-semibold text-brand">DEEPWRITE</span>
           </span>
           <div className="flex items-center gap-4">
-            <a href={DEEPREAD_URL} className="hover:text-soft">
+            <a href={DEEPREAD_URL} className="text-read-dark hover:underline">
               DEEPREAD (읽기 트레이너)
             </a>
             <Link href="/login" className="hover:text-soft">

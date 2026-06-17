@@ -2,12 +2,20 @@ import { ScoreBars } from "./ScoreBars";
 import { DiffView } from "./DiffView";
 import { ExplanationCard } from "./ExplanationCard";
 import { SaveExpressionButton } from "./SaveExpressionButton";
+import { TONE_OPTIONS, type Tone } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import type { Analyze } from "@/lib/schemas/llm";
 
 export type AnalysisResult = Pick<
   Analyze,
-  "scores" | "rewrite" | "diff" | "explanations"
+  "scores" | "rewrites" | "diff" | "explanations"
 > & { writingId: string };
+
+const TONE_ACCENT: Record<Tone, string> = {
+  formal: "border-ox/40 bg-ox/5",
+  neutral: "border-line2 bg-paper2",
+  casual: "border-gold/40 bg-gold/5",
+};
 
 export function AnalysisPanel({ result }: { result: AnalysisResult }) {
   return (
@@ -15,9 +23,26 @@ export function AnalysisPanel({ result }: { result: AnalysisResult }) {
       <ScoreBars scores={result.scores} />
 
       <div>
-        <h3 className="mb-2 text-sm font-semibold text-ink">네이티브 리라이트</h3>
-        <p className="rounded-btn border border-line2 bg-card p-3 text-[15px] leading-relaxed text-ink">
-          {result.rewrite}
+        <h3 className="mb-2 text-sm font-semibold text-ink">
+          3톤 네이티브 리라이트
+        </h3>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {TONE_OPTIONS.map((t) => (
+            <div
+              key={t.value}
+              className={cn("rounded-btn border p-3", TONE_ACCENT[t.value])}
+            >
+              <div className="mb-1.5 text-xs font-medium text-soft">
+                {t.label}
+              </div>
+              <p className="text-[13px] leading-relaxed text-ink">
+                {result.rewrites[t.value]}
+              </p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-1.5 text-xs text-faint">
+          아래 변경 비교·설명은 <span className="text-soft">중립</span> 기준입니다.
         </p>
       </div>
 
@@ -36,9 +61,9 @@ export function AnalysisPanel({ result }: { result: AnalysisResult }) {
 
       {/* 후속 액션: 네이티브 리라이트를 표현장에 저장 (3톤 비교는 좌측 패널 버튼) */}
       <div className="flex flex-wrap items-center gap-2 border-t border-line pt-3">
-        <SaveExpressionButton expression={result.rewrite} />
+        <SaveExpressionButton expression={result.rewrites.neutral} />
         <span className="text-xs text-faint">
-          네이티브 리라이트를 표현장에 저장해 두고 다시 써보세요.
+          중립 리라이트를 표현장에 저장해 두고 다시 써보세요.
         </span>
       </div>
     </div>

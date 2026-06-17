@@ -232,21 +232,21 @@ export default async function DashboardPage() {
         </CardBody>
       </Card>
 
-      {/* DEEPREAD 딥링크 */}
+      {/* DEEPREAD 딥링크 (자매 앱 — 청록 색 유지) */}
       <a
         href={DEEPREAD_URL}
-        className="block rounded-card border border-ox/20 bg-ox/5 px-5 py-4 transition-colors hover:bg-ox/10"
+        className="block rounded-card border border-read/20 bg-read/5 px-5 py-4 transition-colors hover:bg-read/10"
       >
         <div className="flex items-center justify-between gap-3">
           <div>
-            <div className="text-sm font-semibold text-ox-dark">
+            <div className="text-sm font-semibold text-read-dark">
               DEEPREAD로 읽기 훈련 →
             </div>
             <p className="mt-0.5 text-sm text-soft">
               자매 앱에서 읽은 표현을 여기 작문으로 옮겨 보세요.
             </p>
           </div>
-          <span className="text-lg text-ox-dark">📖</span>
+          <span className="text-lg text-read-dark">📖</span>
         </div>
       </a>
     </div>

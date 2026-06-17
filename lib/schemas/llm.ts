@@ -8,20 +8,19 @@ const score = z.number().int().min(0).max(100);
 export const TONES = ["formal", "neutral", "casual"] as const;
 export const ToneEnum = z.enum(TONES);
 
-// 요청 스키마 (POST /api/analyze)
+// 요청 스키마 (POST /api/analyze) — 톤 선택 없이 작문, 피드백에서 3톤 제공
 export const AnalyzeRequestSchema = z.object({
   text: z.string().min(1).max(8000),
-  tone: ToneEnum,
   genre: z.string().optional(),
 });
 
-// ── §1. 5차원 진단 + 네이티브 리라이트 ──
+// ── §1. 5차원 진단 + 3톤 네이티브 리라이트 ──
 export const ScoresSchema = z.object({
   lexis: score,
   collocation: score,
   structure: score,
-  cohesion: score,
-  tone: score,
+  grammar: score,
+  tone: score, // 말투의 일관성·자연스러움 (목표 대비 아님)
 });
 
 export const DiffOpSchema = z.object({
@@ -33,7 +32,7 @@ export const DiffOpSchema = z.object({
 export const ExplanationSchema = z.object({
   before: z.string(),
   after: z.string(),
-  dimension: z.string(), // lexis | collocation | structure | cohesion | tone
+  dimension: z.string(), // lexis | collocation | structure | grammar | tone
   reason: z.string(),
   rule: z.string(),
   frequency: z.string(),
@@ -45,9 +44,17 @@ export const WeaknessSchema = z.object({
   example: z.string(),
 });
 
+// 3톤 버전 (격식/중립/구어) — §1 리라이트와 §2 변환에서 공용.
+export const ToneVersionsSchema = z.object({
+  formal: z.string(),
+  neutral: z.string(),
+  casual: z.string(),
+});
+
+// rewrites: 격식·중립·구어 3톤 (의미 동일). diff/explanations 는 neutral 기준.
 export const AnalyzeSchema = z.object({
   scores: ScoresSchema,
-  rewrite: z.string(),
+  rewrites: ToneVersionsSchema,
   diff: z.array(DiffOpSchema),
   explanations: z.array(ExplanationSchema),
   weaknesses: z.array(WeaknessSchema),
@@ -63,13 +70,7 @@ export const ConsistencyRequestSchema = z.object({
   text: z.string().min(1).max(8000),
 });
 
-// ── §2. 3톤 동시 변환 ──
-export const ToneVersionsSchema = z.object({
-  formal: z.string(),
-  neutral: z.string(),
-  casual: z.string(),
-});
-
+// ── §2. 3톤 동시 변환 (ToneVersionsSchema 는 위에서 정의·공용) ──
 export const ToneDriverSchema = z.object({
   aspect: z.string(),
   formal: z.string(),
