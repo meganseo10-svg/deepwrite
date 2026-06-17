@@ -51,14 +51,6 @@ export async function computeDashboard(
   supabase: SupabaseServer,
   userId: string,
 ): Promise<DashboardData> {
-  // 최근 작문 (점수·미리보기용) — 최신순
-  const { data: writings } = await supabase
-    .from("writings")
-    .select("id, created_at, genre, target_tone, scores, source_text")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false })
-    .limit(20);
-
   type Row = {
     id: string;
     created_at: string;
@@ -67,7 +59,22 @@ export async function computeDashboard(
     scores: Scores | null;
     source_text: string;
   };
-  const rows = (writings ?? []) as Row[];
+
+  // 서로 독립적인 두 쿼리(최근 작문 / 최다 약점)는 병렬 실행.
+  const [writingsRes, weakRes] = await Promise.all([
+    supabase
+      .from("writings")
+      .select("id, created_at, genre, target_tone, scores, source_text")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(20),
+    supabase
+      .from("weakness_summary")
+      .select("category, cnt")
+      .order("cnt", { ascending: false })
+      .limit(1),
+  ]);
+  const rows = (writingsRes.data ?? []) as Row[];
 
   const recent: RecentWriting[] = rows.slice(0, 5).map((w) => ({
     id: w.id,
@@ -90,13 +97,8 @@ export async function computeDashboard(
   const streak = computeStreak(rows.map((w) => w.created_at));
 
   // 최다 약점 (오늘의 과제용)
-  const { data: weak } = await supabase
-    .from("weakness_summary")
-    .select("category, cnt")
-    .order("cnt", { ascending: false })
-    .limit(1);
   const topWeakness =
-    (weak as { category: string }[] | null)?.[0]?.category ?? null;
+    (weakRes.data as { category: string }[] | null)?.[0]?.category ?? null;
 
   return {
     streak,

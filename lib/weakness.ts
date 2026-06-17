@@ -27,23 +27,26 @@ export async function computeWeaknessReport(
   userId: string,
 ): Promise<WeaknessReport> {
   // 1) 유형별 총 누적 (RLS security_invoker → 본인 행만)
-  const { data: summary } = await supabase
-    .from("weakness_summary")
-    .select("category, cnt")
-    .order("cnt", { ascending: false });
-
-  const totals = (summary ?? []) as { category: string; cnt: number }[];
-
   // 2) 최근 14일 이벤트로 추이 계산 (최근 7일 vs 직전 7일)
+  // 두 쿼리는 서로 독립이므로 병렬 실행.
   const now = Date.now();
   const since14 = new Date(now - 14 * DAY_MS).toISOString();
   const cutoff7 = now - 7 * DAY_MS;
 
-  const { data: recentEvents } = await supabase
-    .from("weakness_events")
-    .select("category, created_at")
-    .eq("user_id", userId)
-    .gte("created_at", since14);
+  const [summaryRes, recentRes] = await Promise.all([
+    supabase
+      .from("weakness_summary")
+      .select("category, cnt")
+      .order("cnt", { ascending: false }),
+    supabase
+      .from("weakness_events")
+      .select("category, created_at")
+      .eq("user_id", userId)
+      .gte("created_at", since14),
+  ]);
+
+  const totals = (summaryRes.data ?? []) as { category: string; cnt: number }[];
+  const recentEvents = recentRes.data;
 
   const recent: Record<string, number> = {};
   const prior: Record<string, number> = {};
