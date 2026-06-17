@@ -166,11 +166,18 @@ export default async function DashboardPage() {
                     직전 대비 평균{" "}
                     <span
                       className={
-                        data.avgDeltaPct >= 0 ? "text-ox-dark" : "text-gold"
+                        data.avgDeltaPct > 0
+                          ? "text-ox-dark"
+                          : data.avgDeltaPct < 0
+                            ? "text-gold"
+                            : "text-faint"
                       }
                     >
-                      {data.avgDeltaPct >= 0 ? "▲" : "▼"}{" "}
-                      {Math.abs(data.avgDeltaPct)}점
+                      {data.avgDeltaPct > 0
+                        ? `▲ ${data.avgDeltaPct}점`
+                        : data.avgDeltaPct < 0
+                          ? `▼ ${Math.abs(data.avgDeltaPct)}점`
+                          : "변화 없음"}
                     </span>
                   </p>
                 )}

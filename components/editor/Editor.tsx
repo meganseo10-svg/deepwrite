@@ -68,6 +68,7 @@ export function Editor({
   const [consistency, setConsistency] = useState<Consistency | null>(null);
   const [consistencyLoading, setConsistencyLoading] = useState(false);
   const toneReq = useRef(0);
+  const consistencyReq = useRef(0);
 
   const taRef = useRef<HTMLTextAreaElement>(null);
 
@@ -216,7 +217,18 @@ export function Editor({
   }
 
   async function compareTones() {
+    // 3톤은 문장·짧은 단락용(서버 스키마 2000자) — 긴 글은 친절한 안내로 조기 차단
+    if (text.trim().length > 2000) {
+      setToneResult(null);
+      setToneLocked(false);
+      setConsistency(null);
+      setToneError(
+        "3톤 비교는 2000자 이하의 문장·단락에 적합합니다. 더 짧게 선택해 주세요.",
+      );
+      return;
+    }
     const id = ++toneReq.current;
+    consistencyReq.current++; // 진행 중이던 일관성 응답 무효화
     setToneError(null);
     setToneLocked(false);
     setConsistency(null);
@@ -245,6 +257,7 @@ export function Editor({
   }
 
   async function checkConsistency() {
+    const id = ++consistencyReq.current;
     setConsistencyLoading(true);
     try {
       const res = await fetch("/api/tone/consistency", {
@@ -252,12 +265,13 @@ export function Editor({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
       });
+      if (id !== consistencyReq.current) return; // 오래된 응답 무시
       const data = await res.json();
       if (res.ok) setConsistency(data as Consistency);
     } catch {
       /* 일관성 검사 실패는 조용히 무시 */
     } finally {
-      setConsistencyLoading(false);
+      if (id === consistencyReq.current) setConsistencyLoading(false);
     }
   }
 
