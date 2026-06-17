@@ -11,7 +11,7 @@ import type { BacktransScore } from "@/lib/schemas/llm";
 // 채점(score)은 Pro 전용 — free 는 의도 생성·작성은 가능하나 제출 시 PlanLock.
 export function BacktranslateTrainer({ isPro }: { isPro: boolean }) {
   const [intentKo, setIntentKo] = useState<string | null>(null);
-  const [intentLoading, setIntentLoading] = useState(false);
+  const [intentLoading, setIntentLoading] = useState(true); // 마운트 시 자동 생성
   const [intentError, setIntentError] = useState<string | null>(null);
 
   const [userEn, setUserEn] = useState("");
@@ -22,13 +22,8 @@ export function BacktranslateTrainer({ isPro }: { isPro: boolean }) {
 
   const taRef = useRef<HTMLTextAreaElement>(null);
 
-  async function newProblem() {
-    setIntentLoading(true);
-    setIntentError(null);
-    setResult(null);
-    setLocked(false);
-    setScoreError(null);
-    setUserEn("");
+  // 과제 fetch만 담당(동기 setState 없음) — 마운트 effect/버튼 양쪽에서 호출.
+  async function fetchIntent() {
     try {
       const res = await fetch("/api/backtranslate/new", {
         method: "POST",
@@ -45,10 +40,41 @@ export function BacktranslateTrainer({ isPro }: { isPro: boolean }) {
     }
   }
 
-  // 첫 진입 시 문제 1개 자동 생성
+  // "새 문제" 버튼: 상태를 초기화한 뒤 새 과제를 가져온다.
+  function newProblem() {
+    setIntentLoading(true);
+    setIntentError(null);
+    setResult(null);
+    setLocked(false);
+    setScoreError(null);
+    setUserEn("");
+    void fetchIntent();
+  }
+
+  // 첫 진입 시 문제 1개 자동 생성. setState 는 await 이후에만 일어나도록 인라인.
   useEffect(() => {
-    void newProblem();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/backtranslate/new", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({}),
+        });
+        const data = await res.json();
+        if (cancelled) return;
+        if (res.ok) setIntentKo(data.intent_ko as string);
+        else
+          setIntentError(data?.error?.message ?? "문제 생성에 실패했습니다.");
+      } catch {
+        if (!cancelled) setIntentError("네트워크 오류로 문제 생성에 실패했습니다.");
+      } finally {
+        if (!cancelled) setIntentLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   async function submit() {
