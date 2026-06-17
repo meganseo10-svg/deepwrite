@@ -157,6 +157,11 @@ export const BacktransScoreSchema = z.object({
   model_answer: z.string(),
 });
 
+// 요청 스키마 (POST /api/onboarding) — 짧은 글 정확히 3개
+export const OnboardingRequestSchema = z.object({
+  texts: z.array(z.string().trim().min(1).max(4000)).length(3),
+});
+
 // ── §5. 온보딩 진단 ──
 export const OnboardingSchema = z.object({
   estimated_cefr: z.string(),
