@@ -36,6 +36,12 @@ export async function AppHeader() {
             작문
           </Link>
           <Link
+            href="/backtranslate"
+            className="rounded-badge px-3 py-1.5 text-soft hover:bg-paper2 hover:text-ink"
+          >
+            역번역
+          </Link>
+          <Link
             href="/weakness"
             className="rounded-badge px-3 py-1.5 text-soft hover:bg-paper2 hover:text-ink"
           >

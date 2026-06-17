@@ -135,6 +135,18 @@ export const CompareSchema = z.object({
   antonyms: z.array(z.string()),
 });
 
+// 요청 스키마 (POST /api/backtranslate/new)
+export const BacktransNewRequestSchema = z.object({
+  cefr: z.string().max(10).optional(),
+  genre: z.string().max(40).optional(),
+});
+
+// 요청 스키마 (POST /api/backtranslate/score)
+export const BacktransScoreRequestSchema = z.object({
+  intentKo: z.string().min(1).max(2000),
+  userEn: z.string().min(1).max(4000),
+});
+
 // ── §4. 역번역 ──
 export const BacktransNewSchema = z.object({ intent_ko: z.string() });
 
