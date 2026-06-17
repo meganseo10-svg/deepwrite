@@ -8,10 +8,12 @@ const score = z.number().int().min(0).max(100);
 export const TONES = ["formal", "neutral", "casual"] as const;
 export const ToneEnum = z.enum(TONES);
 
-// 요청 스키마 (POST /api/analyze) — 톤 선택 없이 작문, 피드백에서 3톤 제공
+// 요청 스키마 (POST /api/analyze) — 톤 선택 없이 작문, 피드백에서 3톤 제공.
+// intentKo(선택): 전하려던 뜻(한국어). 있으면 의도 일치까지 교정.
 export const AnalyzeRequestSchema = z.object({
   text: z.string().min(1).max(8000),
   genre: z.string().optional(),
+  intentKo: z.string().max(2000).optional(),
 });
 
 // ── §1. 5차원 진단 + 3톤 네이티브 리라이트 ──

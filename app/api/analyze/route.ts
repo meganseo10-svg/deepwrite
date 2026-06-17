@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   const parsed = AnalyzeRequestSchema.safeParse(body);
   if (!parsed.success)
     return apiError("INVALID_INPUT", "입력이 올바르지 않습니다.", 400);
-  const { text, genre } = parsed.data;
+  const { text, genre, intentKo } = parsed.data;
 
   // 플랜 게이트: free 는 1일 3회 (RLS 덕에 본인 글만 카운트됨)
   const { data: profile } = await supabase
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     result = await generateJSON({
       model: MODELS.heavy,
       system: SYSTEM_ANALYZE,
-      user: userAnalyze(text, genre),
+      user: userAnalyze(text, genre, intentKo),
       schema: AnalyzeSchema,
       thinking: true,
       maxTokens: 8000,

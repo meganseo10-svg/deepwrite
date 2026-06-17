@@ -149,10 +149,23 @@ export default async function LandingPage() {
               꺼내 복습시켜 드릴게요.
             </p>
           </div>
-          <div className="mt-8 flex items-center justify-center">
-            <Link href={ctaHref}>
-              <Button className="px-7">{ctaLabel}</Button>
-            </Link>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            {loggedIn ? (
+              <>
+                <Link href="/write">
+                  <Button className="px-7">새 작문 시작</Button>
+                </Link>
+                <Link href="/dashboard">
+                  <Button variant="secondary" className="px-6">
+                    대시보드로 가기
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <Link href="/login">
+                <Button className="px-7">{ctaLabel}</Button>
+              </Link>
+            )}
           </div>
           <p className="mt-4 text-xs leading-5 text-faint">
             부담 없이 시작하세요.

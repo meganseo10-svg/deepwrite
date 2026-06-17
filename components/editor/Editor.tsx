@@ -38,6 +38,7 @@ export function Editor({
   const tone = initialTone;
   const [hintMode, setHintMode] = useState<HintMode>(initialHintMode);
   const [text, setText] = useState("");
+  const [intentKo, setIntentKo] = useState(""); // 전하려던 뜻(선택)
   const [mobileTab, setMobileTab] = useState<"write" | "analysis">("write");
   const [saved, setSaved] = useState(false);
   const [pending, startTransition] = useTransition();
@@ -194,7 +195,10 @@ export function Editor({
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({
+          text,
+          ...(intentKo.trim() ? { intentKo: intentKo.trim() } : {}),
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -302,6 +306,21 @@ export function Editor({
             persist({ hintMode: m });
           }}
         />
+
+        <div>
+          <label className="mb-1 block text-xs font-medium text-soft">
+            전하려던 뜻{" "}
+            <span className="font-normal text-faint">
+              (한국어, 선택 — 적으면 의도대로 전달됐는지까지 봐 드려요)
+            </span>
+          </label>
+          <textarea
+            value={intentKo}
+            onChange={(e) => setIntentKo(e.target.value)}
+            placeholder="예: 그 계획을 정중히 다시 검토하자고 제안하고 싶어요."
+            className="min-h-16 w-full resize-y rounded-btn border border-line2 bg-paper2 p-3 text-sm leading-relaxed text-ink outline-none focus:border-ox focus:ring-2 focus:ring-ox/30"
+          />
+        </div>
 
         <div>
           <textarea
