@@ -4,6 +4,15 @@ import { Badge } from "@/components/ui/Badge";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 import { DEEPREAD_URL } from "@/lib/constants";
+import { isAdminEmail } from "@/lib/admin";
+import { HeaderMenu } from "@/components/layout/HeaderMenu";
+
+const NAV = [
+  { href: "/write", label: "작문" },
+  { href: "/backtranslate", label: "역번역" },
+  { href: "/weakness", label: "약점" },
+  { href: "/expressions", label: "표현장" },
+];
 
 type Plan = {
   key: string;
@@ -66,14 +75,17 @@ const PLANS: Plan[] = [
 ];
 
 export default async function PricingPage() {
-  let loggedIn = false;
+  let email: string | null = null;
+  let isAdmin = false;
   if (isSupabaseConfigured) {
     const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    loggedIn = !!user;
+    email = user?.email ?? null;
+    isAdmin = isAdminEmail(email);
   }
+  const loggedIn = !!email;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -92,9 +104,13 @@ export default async function PricingPage() {
             >
               읽기는 DEEPREAD ↗
             </a>
-            <Link href={loggedIn ? "/dashboard" : "/login"}>
-              <Button size="sm">{loggedIn ? "대시보드" : "로그인"}</Button>
-            </Link>
+            {loggedIn ? (
+              <HeaderMenu email={email} navItems={NAV} isAdmin={isAdmin} />
+            ) : (
+              <Link href="/login">
+                <Button size="sm">로그인</Button>
+              </Link>
+            )}
           </nav>
         </div>
       </header>
