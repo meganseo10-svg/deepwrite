@@ -309,9 +309,9 @@ export function Editor({
 
         <div>
           <label className="mb-1 block text-xs font-medium text-soft">
-            전하려던 뜻{" "}
+            문장 (한국어){" "}
             <span className="font-normal text-faint">
-              (한국어, 선택 — 적으면 의도대로 전달됐는지까지 봐 드려요)
+              (선택 — 적으면 의도대로 전달됐는지까지 봐 드려요)
             </span>
           </label>
           <textarea
@@ -323,6 +323,9 @@ export function Editor({
         </div>
 
         <div>
+          <label className="mb-1 block text-xs font-medium text-soft">
+            작문 (영어)
+          </label>
           <textarea
             ref={taRef}
             value={text}

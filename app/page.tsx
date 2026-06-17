@@ -5,6 +5,15 @@ import { Card, CardBody } from "@/components/ui/Card";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 import { DEEPREAD_URL } from "@/lib/constants";
+import { isAdminEmail } from "@/lib/admin";
+import { HeaderMenu } from "@/components/layout/HeaderMenu";
+
+const NAV = [
+  { href: "/write", label: "작문" },
+  { href: "/backtranslate", label: "역번역" },
+  { href: "/weakness", label: "약점" },
+  { href: "/expressions", label: "표현장" },
+];
 
 const STEPS = [
   {
@@ -63,14 +72,17 @@ const FEATURES = [
 ];
 
 export default async function LandingPage() {
-  let loggedIn = false;
+  let email: string | null = null;
+  let isAdmin = false;
   if (isSupabaseConfigured) {
     const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    loggedIn = !!user;
+    email = user?.email ?? null;
+    isAdmin = isAdminEmail(email);
   }
+  const loggedIn = !!email;
 
   const ctaHref = loggedIn ? "/dashboard" : "/login";
   const ctaLabel = loggedIn ? "대시보드로 가기" : "무료로 시작하기";
@@ -89,22 +101,19 @@ export default async function LandingPage() {
             </span>
           </Link>
           <nav className="flex items-center gap-1 text-sm">
-            <div className="hidden items-center gap-0.5 md:flex">
-              {[
-                { href: "/write", label: "작문" },
-                { href: "/backtranslate", label: "역번역" },
-                { href: "/weakness", label: "약점" },
-                { href: "/expressions", label: "표현장" },
-              ].map((t) => (
-                <Link
-                  key={t.href}
-                  href={t.href}
-                  className="rounded-badge px-3 py-1.5 text-soft hover:bg-paper2 hover:text-ink"
-                >
-                  {t.label}
-                </Link>
-              ))}
-            </div>
+            {loggedIn && (
+              <div className="hidden items-center gap-0.5 md:flex">
+                {NAV.map((t) => (
+                  <Link
+                    key={t.href}
+                    href={t.href}
+                    className="rounded-badge px-3 py-1.5 text-soft hover:bg-paper2 hover:text-ink"
+                  >
+                    {t.label}
+                  </Link>
+                ))}
+              </div>
+            )}
             <a
               href={DEEPREAD_URL}
               className="rounded-badge px-3 py-1.5 font-medium text-read-dark hover:bg-read/10"
@@ -112,9 +121,13 @@ export default async function LandingPage() {
             >
               읽기는 DEEPREAD ↗
             </a>
-            <Link href={ctaHref}>
-              <Button size="sm">{loggedIn ? "대시보드" : "로그인"}</Button>
-            </Link>
+            {loggedIn ? (
+              <HeaderMenu email={email} navItems={NAV} isAdmin={isAdmin} />
+            ) : (
+              <Link href="/login">
+                <Button size="sm">로그인</Button>
+              </Link>
+            )}
           </nav>
         </div>
       </header>
