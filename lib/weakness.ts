@@ -1,5 +1,6 @@
 import "server-only";
 import type { createClient } from "@/lib/supabase/server";
+import { trendPct } from "@/lib/metrics";
 
 // 약점 리포트 집계 (05 GET /api/weakness).
 // weakness_summary 뷰(유형별 총 누적) + weakness_events 기간 비교로 추이(trendPct)를 계산한다.
@@ -58,14 +59,11 @@ export async function computeWeaknessReport(
     bucket[e.category] = (bucket[e.category] ?? 0) + 1;
   }
 
-  const ranking: WeaknessRankItem[] = totals.map((t) => {
-    const r = recent[t.category] ?? 0;
-    const p = prior[t.category] ?? 0;
-    let trendPct: number;
-    if (p === 0) trendPct = r > 0 ? 100 : 0;
-    else trendPct = Math.round(((r - p) / p) * 100);
-    return { category: t.category, cnt: t.cnt, trendPct };
-  });
+  const ranking: WeaknessRankItem[] = totals.map((t) => ({
+    category: t.category,
+    cnt: t.cnt,
+    trendPct: trendPct(recent[t.category] ?? 0, prior[t.category] ?? 0),
+  }));
 
   // 3) 맞춤 드릴: 최다 약점 유형의 최근 실수 예시 (집중 복습용)
   let drillSuggestion: WeaknessReport["drillSuggestion"] = null;

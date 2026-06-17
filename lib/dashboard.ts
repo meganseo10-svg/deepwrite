@@ -2,6 +2,7 @@ import "server-only";
 import type { createClient } from "@/lib/supabase/server";
 import type { Analyze } from "@/lib/schemas/llm";
 import { avgScore } from "@/lib/constants";
+import { computeStreak } from "@/lib/metrics";
 
 // 대시보드 통합 데이터 (T13). 누적 작문/약점/프로필 기반 — LLM 미사용.
 
@@ -28,23 +29,6 @@ export type DashboardData = {
 
 function avgOf(scores: Scores | null): number | null {
   return scores ? avgScore(scores) : null;
-}
-
-// created_at(UTC 일자) 집합에서 오늘(또는 어제)부터 이어지는 연속 작성일 수.
-function computeStreak(dates: string[]): number {
-  const set = new Set(dates.map((d) => d.slice(0, 10)));
-  if (set.size === 0) return 0;
-  const dayMs = 24 * 60 * 60 * 1000;
-  let cursor = Date.now();
-  const today = new Date(cursor).toISOString().slice(0, 10);
-  // 오늘 작성이 없으면 어제부터 카운트(연속성 유지)
-  if (!set.has(today)) cursor -= dayMs;
-  let streak = 0;
-  while (set.has(new Date(cursor).toISOString().slice(0, 10))) {
-    streak += 1;
-    cursor -= dayMs;
-  }
-  return streak;
 }
 
 export async function computeDashboard(
