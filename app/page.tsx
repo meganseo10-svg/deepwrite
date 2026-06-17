@@ -89,6 +89,22 @@ export default async function LandingPage() {
             </span>
           </Link>
           <nav className="flex items-center gap-1 text-sm">
+            <div className="hidden items-center gap-0.5 md:flex">
+              {[
+                { href: "/write", label: "작문" },
+                { href: "/backtranslate", label: "역번역" },
+                { href: "/weakness", label: "약점" },
+                { href: "/expressions", label: "표현장" },
+              ].map((t) => (
+                <Link
+                  key={t.href}
+                  href={t.href}
+                  className="rounded-badge px-3 py-1.5 text-soft hover:bg-paper2 hover:text-ink"
+                >
+                  {t.label}
+                </Link>
+              ))}
+            </div>
             <a
               href={DEEPREAD_URL}
               className="rounded-badge px-3 py-1.5 text-ox-dark hover:bg-ox/10"
@@ -114,11 +130,13 @@ export default async function LandingPage() {
             <br />
             <span className="text-brand">대충 넘기지 않는</span> 영어 작문
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-soft">
-            영어로 쓰고, 뜻은 통하겠지 하고 넘기셨죠? 이제 통역사가 옆에 앉아 한
-            겹씩 고쳐주듯 봐 드려요. 단어 선택, 자주 붙어 다니는 표현, 문장 구조,
-            그리고 말투까지. 마음에 든 표현은 드래그 한 번으로 쏙 — 잊어버릴
-            때쯤 알아서 다시 꺼내 복습시켜 드릴게요.
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-soft">
+            영어로 쓰고 <span className="font-semibold text-ink">“뜻은 통하겠지”</span>{" "}
+            하고 넘기셨죠? 이제 통역사가 옆에 앉아{" "}
+            <span className="font-semibold text-ink">한 겹씩 고쳐주듯</span> 봐
+            드려요. <span className="text-ink">단어 선택, 콜로케이션, 문장 구조,
+            그리고 말투까지.</span> 마음에 든 표현은 드래그 한 번으로 쏙 —
+            잊어버릴 때쯤 알아서 다시 꺼내 복습시켜 드릴게요.
           </p>
           <div className="mt-8 flex items-center justify-center">
             <Link href={ctaHref}>
