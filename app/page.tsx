@@ -154,9 +154,10 @@ export default async function LandingPage() {
               <Button className="px-7">{ctaLabel}</Button>
             </Link>
           </div>
-          <p className="mt-4 text-xs text-faint">
-            부담 없이 시작하세요. 진단·3톤 비교·역번역·약점 리포트까지, 일단 다
-            둘러보세요 😊
+          <p className="mt-4 text-xs leading-5 text-faint">
+            부담 없이 시작하세요.
+            <br />
+            진단·3톤 비교·역번역·약점 리포트까지, 일단 다 둘러보세요 😊
           </p>
         </section>
 
@@ -167,20 +168,29 @@ export default async function LandingPage() {
           </h2>
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
-              <CardBody className="space-y-2 pt-5">
+              <CardBody className="space-y-2.5 pt-5">
                 <div className="text-xs font-medium text-faint">
                   문장 분석 · 말투까지
                 </div>
-                <p className="text-[15px] text-soft line-through decoration-gold/60">
-                  I wanna change the plan.
-                </p>
-                <p className="text-[15px] font-medium text-ink">
-                  격식: I’d like to revise the plan.
-                </p>
+                <p className="text-[15px] text-ink">“그 계획, 다시 검토하고 싶어요.”</p>
+                <div className="text-[15px]">
+                  <div>
+                    <span className="text-xs text-faint">내 글 </span>
+                    <span className="text-soft line-through decoration-gold/60">
+                      I wanna change the plan.
+                    </span>
+                  </div>
+                  <div className="mt-1">
+                    <span className="text-xs text-faint">다듬으면 </span>
+                    <span className="font-medium text-ink">
+                      I’d like to revise the plan.
+                    </span>
+                  </div>
+                </div>
                 <p className="text-sm leading-relaxed text-soft">
-                  왜 바뀔까요? <span className="text-ink">wanna</span>는 구어,
-                  <span className="text-ink"> would like to·revise</span>는
-                  정중·격식 — 같은 뜻도 목표 말투에 맞춰 인상을 조율해 드려요.
+                  <span className="text-ink">wanna</span>는 구어,{" "}
+                  <span className="text-ink">would like to·revise</span>는
+                  정중·격식 — 같은 뜻도 말투에 맞춰 인상을 조율해 드려요.
                 </p>
               </CardBody>
             </Card>
