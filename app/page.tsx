@@ -9,13 +9,13 @@ import { DEEPREAD_URL } from "@/lib/constants";
 const STEPS = [
   {
     n: "1",
-    title: "톤 정하고 영어로 쓰기",
-    desc: "격식·중립·구어 중 목표 말투를 고르고 편하게 써 내려가세요.",
+    title: "그냥 영어로 쓰기",
+    desc: "톤은 안 골라도 돼요. 떠오르는 대로 편하게 영어로 써 내려가세요.",
   },
   {
     n: "2",
-    title: "빠짐없는 5차원 진단",
-    desc: "어휘·콜로케이션·구조·문법·톤을 점수로, 3톤 네이티브 리라이트와 이유까지 한 번에.",
+    title: "다양한 톤으로 피드백 받기",
+    desc: "5차원 점수와 함께 격식·중립·구어 3가지 톤의 네이티브 리라이트를, 왜 그런지 이유까지 한 번에.",
   },
   {
     n: "3",
@@ -38,7 +38,7 @@ const FEATURES = [
   {
     icon: "💡",
     title: "라이브 콜로케이션 힌트",
-    desc: "쓰는 중에 자연스러운 단어 결합과 격식 수준, 한국인이 자주 틀리는 콩글리시 경고를 바로 띄워 드려요.",
+    desc: "쓰는 중에 자연스러운 단어 결합과 격식 수준을 짚어주고, 한국인이 자주 틀리는 콩글리시를 바로 잡아드려요.",
   },
   {
     icon: "🎚️",
@@ -130,14 +130,25 @@ export default async function LandingPage() {
             <br />
             <span className="text-brand">대충 넘기지 않는</span> 영어 작문
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-soft">
-            영어로 쓰고 <span className="font-semibold text-ink">“뜻은 통하겠지”</span>{" "}
-            하고 넘기셨죠? 이제 통역사가 옆에 앉아{" "}
-            <span className="font-semibold text-ink">한 겹씩 고쳐주듯</span> 봐
-            드려요. <span className="text-ink">단어 선택, 콜로케이션, 문장 구조,
-            그리고 말투까지.</span> 마음에 든 표현은 드래그 한 번으로 쏙 —
-            잊어버릴 때쯤 알아서 다시 꺼내 복습시켜 드릴게요.
-          </p>
+          <div className="mx-auto mt-6 max-w-2xl space-y-2.5 text-lg leading-8 text-soft">
+            <p>
+              영어로 쓰고{" "}
+              <span className="font-semibold text-ink">“뜻은 통하겠지”</span> 하고
+              넘기셨죠?
+            </p>
+            <p>
+              이제 통역사가 옆에 앉아{" "}
+              <span className="font-semibold text-ink">한 겹씩 고쳐주듯</span> 봐
+              드려요.
+            </p>
+            <p className="text-ink">
+              단어 선택, 콜로케이션, 문장 구조, 그리고 말투까지.
+            </p>
+            <p>
+              마음에 든 표현은 드래그 한 번으로 쏙, 잊어버릴 때쯤 알아서 다시
+              꺼내 복습시켜 드릴게요.
+            </p>
+          </div>
           <div className="mt-8 flex items-center justify-center">
             <Link href={ctaHref}>
               <Button className="px-7">{ctaLabel}</Button>

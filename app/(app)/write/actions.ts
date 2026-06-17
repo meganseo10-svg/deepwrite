@@ -20,6 +20,25 @@ export async function updateWritingPrefs(tone: Tone, hintMode: HintMode) {
   return { ok: true as const };
 }
 
+// 마이페이지: 표시 이름 변경.
+export async function updateDisplayName(name: string) {
+  const trimmed = name.trim();
+  if (!trimmed) return { error: "이름을 입력해 주세요." as const };
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "unauthenticated" as const };
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ display_name: trimmed.slice(0, 60) })
+    .eq("id", user.id);
+  if (error) return { error: error.message };
+  return { ok: true as const };
+}
+
 // 표현장에서 표현 삭제 (RLS own express + user_id 조건 이중 가드).
 export async function deleteExpression(id: string) {
   const supabase = await createClient();

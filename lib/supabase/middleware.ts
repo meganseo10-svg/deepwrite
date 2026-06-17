@@ -10,6 +10,7 @@ const PROTECTED_PREFIXES = [
   "/weakness",
   "/onboarding",
   "/expressions",
+  "/mypage",
 ];
 
 /**
