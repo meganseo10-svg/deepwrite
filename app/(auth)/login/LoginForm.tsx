@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { signIn, signUp, signInWithGoogle, type AuthState } from "./actions";
@@ -10,9 +11,11 @@ type Mode = "signin" | "signup";
 export function LoginForm({
   redirectTo,
   configured,
+  oauthError,
 }: {
   redirectTo: string;
   configured: boolean;
+  oauthError?: string;
 }) {
   const [mode, setMode] = useState<Mode>("signin");
   const [state, formAction, pending] = useActionState<AuthState, FormData>(
@@ -81,6 +84,9 @@ export function LoginForm({
           />
         </div>
 
+        {oauthError && !state.error && (
+          <p className="text-xs text-gold">{oauthError}</p>
+        )}
         {state.error && (
           <p className="text-xs text-gold">{state.error}</p>
         )}
@@ -96,6 +102,17 @@ export function LoginForm({
               : "회원가입"}
         </Button>
       </form>
+
+      {mode === "signin" && (
+        <div className="mt-3 text-center">
+          <Link
+            href="/forgot-password"
+            className="text-xs text-soft hover:text-ink"
+          >
+            비밀번호를 잊으셨나요?
+          </Link>
+        </div>
+      )}
 
       <div className="my-4 flex items-center gap-3 text-xs text-faint">
         <div className="h-px flex-1 bg-line" />
