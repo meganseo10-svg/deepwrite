@@ -19,3 +19,24 @@ export async function updateWritingPrefs(tone: Tone, hintMode: HintMode) {
   if (error) return { error: error.message };
   return { ok: true as const };
 }
+
+// 네이티브 리라이트(또는 표현)를 표현장에 저장 (03 saved_expressions, deepread 모방 훈련 소스).
+export async function saveExpression(expression: string, note?: string) {
+  const text = expression.trim();
+  if (!text) return { error: "빈 표현은 저장할 수 없습니다." as const };
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "unauthenticated" as const };
+
+  const { error } = await supabase.from("saved_expressions").insert({
+    user_id: user.id,
+    expression: text.slice(0, 4000),
+    note: note?.trim() || null,
+    from_deepread: false,
+  });
+  if (error) return { error: error.message };
+  return { ok: true as const };
+}

@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/Button";
 import { ScoreBars } from "./ScoreBars";
 import { DiffView } from "./DiffView";
 import { ExplanationCard } from "./ExplanationCard";
+import { SaveExpressionButton } from "./SaveExpressionButton";
 import type { Analyze } from "@/lib/schemas/llm";
 
 export type AnalysisResult = Pick<
@@ -34,14 +34,12 @@ export function AnalysisPanel({ result }: { result: AnalysisResult }) {
         </div>
       </div>
 
-      {/* 후속 액션 (T08 표현저장 / T09 3톤) — 자리만 */}
-      <div className="flex flex-wrap gap-2 border-t border-line pt-3">
-        <Button variant="secondary" size="sm" disabled title="T09에서 연결">
-          3톤으로 비교
-        </Button>
-        <Button variant="secondary" size="sm" disabled title="추후 연결">
-          표현 저장
-        </Button>
+      {/* 후속 액션: 네이티브 리라이트를 표현장에 저장 (3톤 비교는 좌측 패널 버튼) */}
+      <div className="flex flex-wrap items-center gap-2 border-t border-line pt-3">
+        <SaveExpressionButton expression={result.rewrite} />
+        <span className="text-xs text-faint">
+          네이티브 리라이트를 표현장에 저장해 두고 다시 써보세요.
+        </span>
       </div>
     </div>
   );
