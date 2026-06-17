@@ -2,10 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { signOut } from "@/app/(auth)/login/actions";
-
-// 자매 앱 deepread 딥링크 (02 §4-4). 배포 URL은 .env 의
-// NEXT_PUBLIC_DEEPREAD_URL 로 주입 (미설정 시 placeholder).
-const DEEPREAD_URL = process.env.NEXT_PUBLIC_DEEPREAD_URL ?? "#";
+import { DEEPREAD_URL } from "@/lib/constants";
 
 export async function AppHeader() {
   let email: string | null = null;

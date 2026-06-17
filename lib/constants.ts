@@ -1,5 +1,10 @@
 // UI/도메인 공용 상수.
 
+// 자매 앱 deepread 딥링크 (헤더·대시보드·랜딩 공용). env 우선, 없으면 배포 URL 폴백.
+export const DEEPREAD_URL =
+  process.env.NEXT_PUBLIC_DEEPREAD_URL ??
+  "https://deepread-meganseo10-9394s-projects.vercel.app/";
+
 export const TONE_OPTIONS = [
   { value: "formal", label: "격식체" },
   { value: "neutral", label: "중립" },

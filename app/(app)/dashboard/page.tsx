@@ -6,9 +6,7 @@ import { ScoreBars } from "@/components/editor/ScoreBars";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 import { computeDashboard, type DashboardData } from "@/lib/dashboard";
-import { weaknessLabel, TONE_OPTIONS } from "@/lib/constants";
-
-const DEEPREAD_URL = process.env.NEXT_PUBLIC_DEEPREAD_URL ?? "#";
+import { weaknessLabel, TONE_OPTIONS, DEEPREAD_URL } from "@/lib/constants";
 
 const EMPTY: DashboardData = {
   streak: 0,
