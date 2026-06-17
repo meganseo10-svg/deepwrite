@@ -1,6 +1,7 @@
 import "server-only";
 import type { createClient } from "@/lib/supabase/server";
 import type { Analyze } from "@/lib/schemas/llm";
+import { avgScore } from "@/lib/constants";
 
 // 대시보드 통합 데이터 (T13). 누적 작문/약점/프로필 기반 — LLM 미사용.
 
@@ -26,15 +27,7 @@ export type DashboardData = {
 };
 
 function avgOf(scores: Scores | null): number | null {
-  if (!scores) return null;
-  const vals = [
-    scores.lexis,
-    scores.collocation,
-    scores.structure,
-    scores.cohesion,
-    scores.tone,
-  ];
-  return Math.round(vals.reduce((s, v) => s + v, 0) / vals.length);
+  return scores ? avgScore(scores) : null;
 }
 
 // created_at(UTC 일자) 집합에서 오늘(또는 어제)부터 이어지는 연속 작성일 수.

@@ -9,7 +9,7 @@ import {
   type BacktransScore,
 } from "@/lib/schemas/llm";
 import { apiError } from "@/lib/http";
-import { isProPlan } from "@/lib/plan";
+import { isUserPro } from "@/lib/plan";
 
 // 역번역 채점 (§4-b, 핵심). Pro 전용. backtranslations 적재.
 // 사용자 영어 입력이 포함되므로 캐시 미사용(04 개인정보 규칙).
@@ -31,12 +31,7 @@ export async function POST(req: Request) {
     return apiError("INVALID_INPUT", "입력이 올바르지 않습니다.", 400);
   const { intentKo, userEn } = parsed.data;
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("plan")
-    .eq("id", user.id)
-    .maybeSingle();
-  if (!isProPlan(profile?.plan))
+  if (!(await isUserPro(supabase, user.id)))
     return apiError("PLAN_REQUIRED", "역번역 채점은 Pro 전용 기능입니다.", 403);
 
   let result: BacktransScore;

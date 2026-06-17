@@ -10,7 +10,7 @@ import {
 } from "@/lib/schemas/llm";
 import { cacheKey, getCached, setCached } from "@/lib/llm/cache";
 import { apiError } from "@/lib/http";
-import { isProPlan } from "@/lib/plan";
+import { isUserPro } from "@/lib/plan";
 
 // 비교 단어 카드 (§3-b). Pro 전용 게이트 + 단어 단위 캐시.
 export async function POST(req: Request) {
@@ -31,12 +31,7 @@ export async function POST(req: Request) {
     return apiError("INVALID_INPUT", "입력이 올바르지 않습니다.", 400);
 
   // Pro 게이트
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("plan")
-    .eq("id", user.id)
-    .maybeSingle();
-  if (!isProPlan(profile?.plan))
+  if (!(await isUserPro(supabase, user.id)))
     return apiError(
       "PLAN_REQUIRED",
       "비교 단어 카드는 Pro 전용 기능입니다.",

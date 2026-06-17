@@ -9,7 +9,7 @@ import {
   type Consistency,
 } from "@/lib/schemas/llm";
 import { apiError } from "@/lib/http";
-import { isProPlan } from "@/lib/plan";
+import { isUserPro } from "@/lib/plan";
 
 // 톤 일관성 검사 (§2, 글 전체 대상). 3톤 도구의 고급 기능 → Pro 전용.
 // 사용자 글 전체가 입력이므로 캐시 미사용(04 개인정보 규칙).
@@ -30,12 +30,7 @@ export async function POST(req: Request) {
   if (!parsed.success)
     return apiError("INVALID_INPUT", "입력이 올바르지 않습니다.", 400);
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("plan")
-    .eq("id", user.id)
-    .maybeSingle();
-  if (!isProPlan(profile?.plan))
+  if (!(await isUserPro(supabase, user.id)))
     return apiError("PLAN_REQUIRED", "톤 일관성 검사는 Pro 전용 기능입니다.", 403);
 
   let result: Consistency;

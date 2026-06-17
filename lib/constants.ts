@@ -27,6 +27,33 @@ export function weaknessLabel(category: string): string {
   return WEAKNESS_LABELS[category] ?? category;
 }
 
+// 5차원 점수 라벨·순서 (04 §1). ScoreBars·ExplanationCard 공용 — 라벨 드리프트 방지.
+export const SCORE_DIMS = [
+  { key: "lexis", label: "어휘" },
+  { key: "collocation", label: "콜로케이션" },
+  { key: "structure", label: "문장 구조" },
+  { key: "cohesion", label: "응집" },
+  { key: "tone", label: "톤 일치" },
+] as const;
+
+export function scoreDimLabel(key: string): string {
+  return SCORE_DIMS.find((d) => d.key === key)?.label ?? key;
+}
+
+type ScoreSet = {
+  lexis: number;
+  collocation: number;
+  structure: number;
+  cohesion: number;
+  tone: number;
+};
+
+// 5차원 평균(0~100 정수). ScoreBars·dashboard 공용.
+export function avgScore(s: ScoreSet): number {
+  const v = [s.lexis, s.collocation, s.structure, s.cohesion, s.tone];
+  return Math.round(v.reduce((a, b) => a + b, 0) / v.length);
+}
+
 export const HINT_MODE_OPTIONS = [
   { value: "instant", label: "즉시 힌트" },
   { value: "after_try", label: "시도 후 힌트" },
