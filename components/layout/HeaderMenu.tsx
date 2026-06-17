@@ -10,9 +10,11 @@ type NavItem = { href: string; label: string };
 export function HeaderMenu({
   email,
   navItems,
+  isAdmin = false,
 }: {
   email: string | null;
   navItems: NavItem[];
+  isAdmin?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -84,6 +86,22 @@ export function HeaderMenu({
           >
             대시보드
           </Link>
+          <Link
+            href="/pricing"
+            onClick={() => setOpen(false)}
+            className="block px-3 py-2 text-sm text-soft hover:bg-paper2 hover:text-ink"
+          >
+            요금제
+          </Link>
+          {isAdmin && (
+            <Link
+              href="/admin"
+              onClick={() => setOpen(false)}
+              className="block px-3 py-2 text-sm text-gold hover:bg-paper2"
+            >
+              관리자
+            </Link>
+          )}
 
           <div className="my-1 border-t border-line" />
           <form action={signOut}>

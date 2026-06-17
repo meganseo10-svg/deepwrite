@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { DEEPREAD_URL } from "@/lib/constants";
+import { isAdminEmail } from "@/lib/admin";
 import { HeaderMenu } from "@/components/layout/HeaderMenu";
 
 const NAV = [
@@ -13,12 +14,14 @@ const NAV = [
 
 export async function AppHeader() {
   let email: string | null = null;
+  let isAdmin = false;
   if (isSupabaseConfigured) {
     const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
     email = user?.email ?? null;
+    isAdmin = isAdminEmail(email);
   }
 
   return (
@@ -52,7 +55,7 @@ export async function AppHeader() {
             ← DEEPREAD로
           </a>
           {email ? (
-            <HeaderMenu email={email} navItems={NAV} />
+            <HeaderMenu email={email} navItems={NAV} isAdmin={isAdmin} />
           ) : (
             <Link
               href="/login"

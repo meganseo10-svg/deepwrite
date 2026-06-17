@@ -313,6 +313,9 @@ export default async function LandingPage() {
             Made by Megan, Seo · <span className="font-semibold text-brand">DEEPWRITE</span>
           </span>
           <div className="flex items-center gap-4">
+            <Link href="/pricing" className="hover:text-soft">
+              요금제
+            </Link>
             <a href={DEEPREAD_URL} className="text-read-dark hover:underline">
               DEEPREAD (읽기 트레이너)
             </a>

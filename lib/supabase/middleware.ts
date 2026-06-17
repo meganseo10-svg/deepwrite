@@ -11,6 +11,7 @@ const PROTECTED_PREFIXES = [
   "/onboarding",
   "/expressions",
   "/mypage",
+  "/admin",
 ];
 
 /**
