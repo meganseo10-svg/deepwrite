@@ -143,7 +143,7 @@ export default async function LandingPage() {
             <br />
             <span className="text-brand">대충 넘기지 않는</span> 영어 작문
           </h1>
-          <div className="mx-auto mt-6 max-w-2xl space-y-2.5 text-lg leading-8 text-soft">
+          <div className="mx-auto mt-6 max-w-2xl space-y-1 text-lg leading-7 text-soft">
             <p>
               영어로 쓰고{" "}
               <span className="font-semibold text-ink">“뜻은 통하겠지”</span> 하고
