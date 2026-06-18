@@ -31,8 +31,24 @@ export async function POST(request: Request) {
   if (!isPurchasablePlan(plan))
     return apiError("INVALID_INPUT", "구매할 수 없는 요금제입니다.", 400);
   // 보안: customerKey 는 반드시 본인 식별자(user.id)여야 함.
+  // (authKey↔customerKey 바인딩 자체는 토스 issue 엔드포인트가 재검증하므로
+  //  이 비교는 본인 결제 보장을 위한 1차 방어선.)
   if (customerKey !== user.id)
     return apiError("INVALID_INPUT", "결제 정보가 일치하지 않습니다.", 400);
+
+  // 멱등성: 이미 같은 플랜의 유효한 활성 구독이 있으면(성공 페이지 새로고침 등)
+  // 빌링키 재발급·재결제 없이 성공 처리. (RLS owner select 로 본인 행만 조회)
+  const { data: existingActive } = await supabase
+    .from("subscriptions")
+    .select("plan")
+    .eq("user_id", user.id)
+    .eq("status", "active")
+    .gt("current_period_end", new Date().toISOString())
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (existingActive?.plan === plan)
+    return NextResponse.json({ ok: true, plan });
 
   const info = PLAN_INFO[plan];
   const orderId = `${plan}_${user.id}_${crypto.randomUUID()}`.slice(0, 64);

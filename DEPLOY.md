@@ -32,7 +32,8 @@
 1. **DB 마이그레이션**: SQL Editor에서 순서대로 적용
    - `supabase/migrations/0001_init.sql` (적용 완료)
    - `supabase/migrations/0002_usage_events.sql` (적용 완료 — 톤 미리보기 게이트용)
-   - `supabase/migrations/0003_subscriptions.sql` (**미적용 — 결제 쓸 경우 반드시 적용**: 토스 구독 기록용)
+   - `supabase/migrations/0003_subscriptions.sql` (적용 완료 — 토스 구독 기록용)
+   - `supabase/migrations/0004_subscriptions_unique_active.sql` (**미적용 — 결제 쓸 경우 적용**: 사용자당 활성 구독 1개 보장)
 2. **Auth → URL Configuration**
    - Site URL: `https://<배포도메인>`
    - Redirect URLs에 `https://<배포도메인>/auth/callback` 추가
