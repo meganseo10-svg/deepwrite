@@ -102,6 +102,13 @@ export async function POST(req: Request) {
     );
   }
 
+  // 3톤 리라이트 보존(0005). best-effort — rewrites 컬럼 미적용 환경에선
+  // 에러가 반환되지만 무시한다(중립 rewrite_text 는 위 insert 에서 이미 저장됨).
+  await supabase
+    .from("writings")
+    .update({ rewrites: result.rewrites })
+    .eq("id", writing.id);
+
   return NextResponse.json({
     writingId: writing.id,
     scores: result.scores,
