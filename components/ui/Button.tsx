@@ -23,16 +23,23 @@ const sizes: Record<Size, string> = {
   md: "h-11 px-5 text-sm rounded-btn",
 };
 
+// 버튼 스타일 클래스 조합. 내비게이션 CTA(<Link>/<a>)에 재사용 —
+// <a> 안에 <button> 을 중첩(유효하지 않은 HTML)하면 클릭이 버튼에 잡혀
+// 앵커 내비게이션이 막히므로, 링크 자체에 이 클래스를 입힌다.
+export function buttonClass(opts?: {
+  variant?: Variant;
+  size?: Size;
+  className?: string;
+}): string {
+  const { variant = "primary", size = "md", className } = opts ?? {};
+  return cn(base, variants[variant], sizes[size], className);
+}
+
 export function Button({
   className,
   variant = "primary",
   size = "md",
   ...props
 }: ButtonProps) {
-  return (
-    <button
-      className={cn(base, variants[variant], sizes[size], className)}
-      {...props}
-    />
-  );
+  return <button className={buttonClass({ variant, size, className })} {...props} />;
 }

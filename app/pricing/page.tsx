@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { buttonClass } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
-import { DEEPREAD_URL } from "@/lib/constants";
+import { DEEPREAD_URL, isPurchasablePlan } from "@/lib/constants";
 import { isAdminEmail } from "@/lib/admin";
-import { isPurchasablePlan } from "@/lib/constants";
 import { HeaderMenu } from "@/components/layout/HeaderMenu";
 
 const NAV = [
@@ -108,8 +107,8 @@ export default async function PricingPage() {
             {loggedIn ? (
               <HeaderMenu email={email} navItems={NAV} isAdmin={isAdmin} />
             ) : (
-              <Link href="/login">
-                <Button size="sm">로그인</Button>
+              <Link href="/login" className={buttonClass({ size: "sm" })}>
+                로그인
               </Link>
             )}
           </nav>
@@ -163,13 +162,14 @@ export default async function PricingPage() {
 
               <div className="mt-5">
                 {p.key === "free" ? (
-                  <Link href={loggedIn ? "/write" : "/login"} className="block">
-                    <Button
-                      className="w-full"
-                      variant={p.highlight ? "primary" : "secondary"}
-                    >
-                      {loggedIn ? "작문 시작" : "무료로 시작"}
-                    </Button>
+                  <Link
+                    href={loggedIn ? "/write" : "/login"}
+                    className={buttonClass({
+                      variant: p.highlight ? "primary" : "secondary",
+                      className: "w-full",
+                    })}
+                  >
+                    {loggedIn ? "작문 시작" : "무료로 시작"}
                   </Link>
                 ) : isPurchasablePlan(p.key) ? (
                   <Link
@@ -178,21 +178,20 @@ export default async function PricingPage() {
                         ? `/checkout?plan=${p.key}`
                         : `/login?redirectTo=${encodeURIComponent(`/checkout?plan=${p.key}`)}`
                     }
-                    className="block"
+                    className={buttonClass({
+                      variant: p.highlight ? "primary" : "secondary",
+                      className: "w-full",
+                    })}
                   >
-                    <Button
-                      className="w-full"
-                      variant={p.highlight ? "primary" : "secondary"}
-                    >
-                      {p.name} 시작하기
-                    </Button>
+                    {p.name} 시작하기
                   </Link>
                 ) : (
                   // Business: 인당 과금이라 자가결제 대신 문의.
-                  <a href="mailto:megan.seo@cyberdigm.co.kr?subject=DEEPWRITE Business 문의" className="block">
-                    <Button className="w-full" variant="secondary">
-                      문의하기
-                    </Button>
+                  <a
+                    href="mailto:megan.seo@cyberdigm.co.kr?subject=DEEPWRITE Business 문의"
+                    className={buttonClass({ variant: "secondary", className: "w-full" })}
+                  >
+                    문의하기
                   </a>
                 )}
               </div>
