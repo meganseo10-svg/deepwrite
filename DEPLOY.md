@@ -22,13 +22,17 @@
 | `ANTHROPIC_MODEL_LIGHT` | `claude-haiku-4-5` |
 | `NEXT_PUBLIC_APP_URL` | `https://<배포도메인>` |
 | `NEXT_PUBLIC_DEEPREAD_URL` | deepread 배포 URL (헤더/대시보드 딥링크) |
+| `NEXT_PUBLIC_TOSS_CLIENT_KEY` | 토스페이먼츠 클라이언트 키 (브라우저 노출 OK) |
+| `TOSS_SECRET_KEY` | 토스페이먼츠 시크릿 키 (서버 전용, 절대 NEXT_PUBLIC 금지) |
 
-> 결제(TOSS_*)는 T14 보류 — 미설정으로 둬도 빌드/동작 영향 없음.
+> 결제(TOSS_*) 미설정 시: 체크아웃이 "결제 준비 중"으로 비활성, 빌드/기타 동작엔 영향 없음.
+> 테스트 키(`test_ck_…`/`test_sk_…`)로 먼저 검증 후 라이브 키 교체 권장.
 
 ## 3. Supabase 프로덕션 설정
 1. **DB 마이그레이션**: SQL Editor에서 순서대로 적용
    - `supabase/migrations/0001_init.sql` (적용 완료)
-   - `supabase/migrations/0002_usage_events.sql` (**미적용 — 반드시 적용**: 톤 미리보기 게이트용)
+   - `supabase/migrations/0002_usage_events.sql` (적용 완료 — 톤 미리보기 게이트용)
+   - `supabase/migrations/0003_subscriptions.sql` (**미적용 — 결제 쓸 경우 반드시 적용**: 토스 구독 기록용)
 2. **Auth → URL Configuration**
    - Site URL: `https://<배포도메인>`
    - Redirect URLs에 `https://<배포도메인>/auth/callback` 추가

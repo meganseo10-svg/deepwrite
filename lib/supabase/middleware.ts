@@ -12,6 +12,8 @@ const PROTECTED_PREFIXES = [
   "/expressions",
   "/mypage",
   "/admin",
+  "/checkout",
+  "/billing",
 ];
 
 /**
@@ -55,7 +57,8 @@ export async function updateSession(request: NextRequest) {
   if (!user && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    url.searchParams.set("redirectTo", pathname);
+    // 쿼리스트링 보존(예: /checkout?plan=pro) — login 의 sanitizeRedirect 가 검증.
+    url.searchParams.set("redirectTo", pathname + request.nextUrl.search);
     return NextResponse.redirect(url);
   }
 

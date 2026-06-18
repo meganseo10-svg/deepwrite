@@ -59,6 +59,21 @@ export function avgScore(s: ScoreSet): number {
   return Math.round(v.reduce((a, b) => a + b, 0) / v.length);
 }
 
+// 유료 플랜 정보 (요금제 페이지·결제 공용). amount = 원(KRW) 정수.
+// self-serve 결제 대상은 개인 3플랜(Basic/Pro/Master). Business 는 인당 과금이라 문의.
+export const PLAN_INFO: Record<string, { name: string; amount: number }> = {
+  basic: { name: "Basic", amount: 9900 },
+  pro: { name: "Pro", amount: 19900 },
+  master: { name: "Master", amount: 39900 },
+};
+
+export const PURCHASABLE_PLANS = ["basic", "pro", "master"] as const;
+export type PurchasablePlan = (typeof PURCHASABLE_PLANS)[number];
+
+export function isPurchasablePlan(plan: string): plan is PurchasablePlan {
+  return (PURCHASABLE_PLANS as readonly string[]).includes(plan);
+}
+
 export const HINT_MODE_OPTIONS = [
   { value: "instant", label: "즉시 힌트" },
   { value: "after_try", label: "시도 후 힌트" },

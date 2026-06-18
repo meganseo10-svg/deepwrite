@@ -5,6 +5,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 import { DEEPREAD_URL } from "@/lib/constants";
 import { isAdminEmail } from "@/lib/admin";
+import { isPurchasablePlan } from "@/lib/constants";
 import { HeaderMenu } from "@/components/layout/HeaderMenu";
 
 const NAV = [
@@ -170,15 +171,29 @@ export default async function PricingPage() {
                       {loggedIn ? "작문 시작" : "무료로 시작"}
                     </Button>
                   </Link>
-                ) : (
-                  <Button
-                    className="w-full"
-                    variant={p.highlight ? "primary" : "secondary"}
-                    disabled
-                    title="결제는 곧 제공됩니다"
+                ) : isPurchasablePlan(p.key) ? (
+                  <Link
+                    href={
+                      loggedIn
+                        ? `/checkout?plan=${p.key}`
+                        : `/login?redirectTo=${encodeURIComponent(`/checkout?plan=${p.key}`)}`
+                    }
+                    className="block"
                   >
-                    결제 준비 중
-                  </Button>
+                    <Button
+                      className="w-full"
+                      variant={p.highlight ? "primary" : "secondary"}
+                    >
+                      {p.name} 시작하기
+                    </Button>
+                  </Link>
+                ) : (
+                  // Business: 인당 과금이라 자가결제 대신 문의.
+                  <a href="mailto:megan.seo@cyberdigm.co.kr?subject=DEEPWRITE Business 문의" className="block">
+                    <Button className="w-full" variant="secondary">
+                      문의하기
+                    </Button>
+                  </a>
                 )}
               </div>
             </div>
@@ -186,8 +201,9 @@ export default async function PricingPage() {
         </div>
 
         <p className="mt-8 text-center text-xs text-faint">
-          유료 결제는 곧 제공됩니다. 지금은 Free로 핵심 기능을 모두 체험해
-          보세요. · MVP 게이트: 비교 단어 카드·역번역은 Pro 전용.
+          결제는 토스페이먼츠로 안전하게 처리되며, 언제든 마이페이지에서 해지할 수
+          있어요. · MVP 게이트: 비교 단어 카드·역번역은 Pro 전용. · Business는 문의해
+          주세요.
         </p>
       </main>
 

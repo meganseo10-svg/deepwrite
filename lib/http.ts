@@ -6,7 +6,8 @@ export type ApiErrCode =
   | "INVALID_INPUT"
   | "RATE_LIMIT"
   | "PLAN_REQUIRED"
-  | "LLM_FAIL";
+  | "LLM_FAIL"
+  | "BILLING_FAIL";
 
 export function apiError(code: ApiErrCode, message: string, status: number) {
   return NextResponse.json({ error: { code, message } }, { status });
