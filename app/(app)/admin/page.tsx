@@ -9,6 +9,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminEmail } from "@/lib/admin";
+import { avgScore } from "@/lib/constants";
 
 const PLAN_LABEL: Record<string, string> = {
   free: "무료",
@@ -183,16 +184,7 @@ export default async function AdminPage() {
               <p className="py-2 text-sm text-faint">데이터 없음</p>
             ) : (
               recentWritings.map((w) => {
-                const avg = w.scores
-                  ? Math.round(
-                      (w.scores.lexis +
-                        w.scores.collocation +
-                        w.scores.structure +
-                        w.scores.grammar +
-                        w.scores.tone) /
-                        5,
-                    )
-                  : null;
+                const avg = w.scores ? avgScore(w.scores) : null;
                 return (
                   <div key={w.id} className="flex items-center gap-3 py-2">
                     <span className="w-10 shrink-0 text-xs text-faint">
