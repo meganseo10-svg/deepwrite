@@ -32,11 +32,22 @@ export default async function WritePage() {
   }
 
   return (
-    <Editor
-      initialTone={tone}
-      initialHintMode={hintMode}
-      canSave={canSave}
-      isPro={isPro}
-    />
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-2xl font-bold text-ink">작문하기</h1>
+        <p className="mt-1 text-sm leading-relaxed text-soft">
+          쓰고 싶은 내용을 <span className="font-medium text-ink">자유롭게 영어로</span>{" "}
+          쓰면, 5차원 진단과 격식·중립·구어 3톤 리라이트를 드려요. 정해진 한국어 문장을
+          영어로 옮기는 연습은 <span className="font-medium text-ink">역번역</span>{" "}
+          탭에 있어요.
+        </p>
+      </div>
+      <Editor
+        initialTone={tone}
+        initialHintMode={hintMode}
+        canSave={canSave}
+        isPro={isPro}
+      />
+    </div>
   );
 }
