@@ -13,6 +13,8 @@ import { apiError } from "@/lib/http";
 import { isUserPro } from "@/lib/plan";
 
 // 비교 단어 카드 (§3-b). Pro 전용 게이트 + 단어 단위 캐시.
+export const maxDuration = 60; // LLM 호출 → Vercel 기본(10s) 초과 방지
+
 export async function POST(req: Request) {
   const supabase = await createClient();
   const {

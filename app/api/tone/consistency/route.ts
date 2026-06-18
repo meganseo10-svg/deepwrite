@@ -13,6 +13,8 @@ import { isUserPro } from "@/lib/plan";
 
 // 톤 일관성 검사 (§2, 글 전체 대상). 3톤 도구의 고급 기능 → Pro 전용.
 // 사용자 글 전체가 입력이므로 캐시 미사용(04 개인정보 규칙).
+export const maxDuration = 60; // LLM 호출 → Vercel 기본(10s) 초과 방지
+
 export async function POST(req: Request) {
   const supabase = await createClient();
   const {

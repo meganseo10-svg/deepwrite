@@ -12,6 +12,8 @@ import { apiError } from "@/lib/http";
 
 // 온보딩 진단 (§5). 짧은 글 3개를 5차원으로 분석·평균 → 추정 CEFR + 최약점.
 // 사용자 글 입력이라 캐시 미사용(04 개인정보 규칙). 결과의 CEFR 을 profiles 에 반영.
+export const maxDuration = 60; // LLM 호출 → Vercel 기본(10s) 초과 방지
+
 export async function POST(req: Request) {
   const supabase = await createClient();
   const {

@@ -12,6 +12,8 @@ import { apiError } from "@/lib/http";
 
 // 역번역 과제 생성 (§4-a). 인증만 필요(채점은 별도 Pro 게이트).
 // 생성되는 한국어 의도는 개인정보 아님이나, CEFR/장르 조합이 다양해 캐시 미사용.
+export const maxDuration = 60; // LLM 호출 → Vercel 기본(10s) 초과 방지
+
 export async function POST(req: Request) {
   const supabase = await createClient();
   const {

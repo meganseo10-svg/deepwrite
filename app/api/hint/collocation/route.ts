@@ -12,6 +12,8 @@ import { cacheKey, getCached, setCached } from "@/lib/llm/cache";
 import { apiError } from "@/lib/http";
 
 // 라이브 콜로케이션 힌트 (경량 모델 + 캐시). 일반 단어 단위라 캐싱 안전(04).
+export const maxDuration = 60; // LLM 호출 → Vercel 기본(10s) 초과 방지
+
 export async function POST(req: Request) {
   const supabase = await createClient();
   const {

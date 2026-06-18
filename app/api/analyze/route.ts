@@ -9,6 +9,9 @@ import { kstDayStartIso } from "@/lib/metrics";
 
 const FREE_DAILY_LIMIT = 3; // 05: free=일 3회 / basic+=무제한
 
+// 진단은 thinking+8000토큰이라 수십 초 소요 → Vercel 기본(10s) 초과 방지.
+export const maxDuration = 60;
+
 export async function POST(req: Request) {
   const supabase = await createClient();
   const {

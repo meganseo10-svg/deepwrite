@@ -12,6 +12,9 @@ import { kstDayStartIso } from "@/lib/metrics";
 // 입력이 사용자 글이므로 analyze 와 동일하게 캐시 미사용(04 개인정보 규칙).
 const FEATURE = "tone_preview";
 
+// 3톤 변환은 십수 초 소요 → Vercel 기본(10s) 초과 방지.
+export const maxDuration = 60;
+
 export async function POST(req: Request) {
   const supabase = await createClient();
   const {

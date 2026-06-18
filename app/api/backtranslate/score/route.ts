@@ -13,6 +13,8 @@ import { isUserPro } from "@/lib/plan";
 
 // 역번역 채점 (§4-b, 핵심). Pro 전용. backtranslations 적재.
 // 사용자 영어 입력이 포함되므로 캐시 미사용(04 개인정보 규칙).
+export const maxDuration = 60; // LLM 호출 → Vercel 기본(10s) 초과 방지
+
 export async function POST(req: Request) {
   const supabase = await createClient();
   const {
