@@ -5,7 +5,7 @@ import {
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 
-// 표현장 (저장한 네이티브 표현 모음). deepread 모방 훈련 소스.
+// 어휘장 (저장한 어휘 카드 + 네이티브 표현 모음). deepread 단어장형.
 export default async function ExpressionsPage() {
   let items: SavedExpression[] = [];
 
@@ -15,9 +15,10 @@ export default async function ExpressionsPage() {
       data: { user },
     } = await supabase.auth.getUser();
     if (user) {
+      // select("*") — vocab/headword 컬럼(0006) 미적용 환경에서도 안전.
       const { data } = await supabase
         .from("saved_expressions")
-        .select("id, expression, note, from_deepread, created_at")
+        .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
       items = (data ?? []) as SavedExpression[];
@@ -27,9 +28,9 @@ export default async function ExpressionsPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold text-ink">표현장</h1>
+        <h1 className="text-2xl font-bold text-ink">어휘장</h1>
         <p className="mt-1 text-sm text-soft">
-          저장한 네이티브 표현을 모아 다시 써보며 익혀요.
+          진단에서 담은 단어·표현을 콜로케이션·유의어·반의어와 함께 모아 복습해요.
         </p>
       </div>
       <ExpressionList items={items} />

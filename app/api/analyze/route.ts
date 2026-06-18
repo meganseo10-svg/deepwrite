@@ -61,7 +61,7 @@ export async function POST(req: Request) {
       user: userAnalyze(text, genre, intentKo),
       schema: AnalyzeSchema,
       thinking: true,
-      maxTokens: 8000,
+      maxTokens: 12000, // 5차원+3톤+diff+설명+어휘카드 → 잘림 방지로 상향
     });
   } catch {
     return apiError(
@@ -115,5 +115,6 @@ export async function POST(req: Request) {
     rewrites: result.rewrites,
     diff: result.diff,
     explanations: result.explanations,
+    vocab: result.vocab,
   });
 }

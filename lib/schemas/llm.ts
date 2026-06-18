@@ -53,13 +53,27 @@ export const ToneVersionsSchema = z.object({
   casual: z.string(),
 });
 
+// 어휘 카드 (deepread 단어장형). 글에서 배울 만한 핵심 단어/표현마다 문법·콜로케이션·
+// 유의어(뉘앙스)·반의어·예문을 한 번에. 어휘장에 하나씩 저장하는 단위.
+export const VocabSchema = z.object({
+  headword: z.string(), // 핵심 단어 또는 표현
+  pos: z.string(), // 품사·문법 (예: "동사", "명사구", "전치사구")
+  meaning_ko: z.string(), // 한국어 뜻·쓰임 설명
+  collocations: z.array(z.string()), // 자주 결합하는 콜로케이션
+  synonyms: z.array(z.object({ word: z.string(), nuance: z.string() })), // 유의어+뉘앙스 차이
+  antonyms: z.array(z.string()),
+  example: z.string(), // 영어 예문
+});
+
 // rewrites: 격식·중립·구어 3톤 (의미 동일). diff/explanations 는 neutral 기준.
+// vocab: 글에서 배울 만한 핵심 어휘 카드 (어휘장 저장 단위).
 export const AnalyzeSchema = z.object({
   scores: ScoresSchema,
   rewrites: ToneVersionsSchema,
   diff: z.array(DiffOpSchema),
   explanations: z.array(ExplanationSchema),
   weaknesses: z.array(WeaknessSchema),
+  vocab: z.array(VocabSchema),
 });
 
 // 요청 스키마 (POST /api/tone) — 문장 또는 짧은 단락
@@ -180,4 +194,5 @@ export type Compare = z.infer<typeof CompareSchema>;
 export type BacktransNew = z.infer<typeof BacktransNewSchema>;
 export type BacktransScore = z.infer<typeof BacktransScoreSchema>;
 export type Onboarding = z.infer<typeof OnboardingSchema>;
+export type Vocab = z.infer<typeof VocabSchema>;
 export type Tone = (typeof TONES)[number];

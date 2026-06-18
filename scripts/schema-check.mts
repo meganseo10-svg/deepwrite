@@ -38,6 +38,20 @@ const cases: Array<[string, ZodType, unknown]> = [
         },
       ],
       weaknesses: [{ category: "article", detail: "the 누락", example: "in long term" }],
+      vocab: [
+        {
+          headword: "share one's view",
+          pos: "동사구",
+          meaning_ko: "의견을 (나누듯) 밝히다",
+          collocations: ["share my view", "share an opinion", "express a view"],
+          synonyms: [
+            { word: "express", nuance: "더 격식·일방적 전달" },
+            { word: "voice", nuance: "공개적으로 목소리를 내다" },
+          ],
+          antonyms: ["withhold", "conceal"],
+          example: "I'd like to share my view on this matter.",
+        },
+      ],
     },
   ],
   // §2

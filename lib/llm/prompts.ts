@@ -19,6 +19,12 @@ diff 는 원문과 neutral 리라이트를 단어 단위로 비교해 op(keep|in
 explanations 의 dimension 은 lexis|collocation|structure|grammar|tone 중 하나로 지정하세요.
 weaknesses 는 오류 유형(article/collocation/tense/preposition/run_on/register/word_choice 등)으로 분류하세요.
 
+vocab: 이 글에서 학습자가 어휘장에 담아 복습할 만한 핵심 단어·표현을 3~6개 고르세요
+(리라이트에서 새로 쓴 더 나은 표현을 우선). 각 항목에 headword(단어/표현),
+pos(품사·문법), meaning_ko(한국어 뜻·쓰임), collocations(자주 쓰는 조합 2~4개),
+synonyms(유의어 2~3개 + 각 nuance 차이, 한국어), antonyms(반의어), example(영어 예문 1개)
+를 채우세요. 사전식 단어장처럼 깊이 있게.
+
 [전하려던 뜻] 이 주어지면, 사용자의 영어가 그 의도를 정확히 전달하는지도 함께 판단하세요.
 의도와 어긋나면(의미 누락·왜곡·과장) 의도에 맞게 리라이트하고, 그 차이를 explanations·weaknesses 에
 반드시 반영하세요. 주어지지 않으면 영어 자체를 해석해 가장 자연스럽게 교정하세요.`;

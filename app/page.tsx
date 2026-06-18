@@ -12,7 +12,7 @@ const NAV = [
   { href: "/write", label: "작문" },
   { href: "/backtranslate", label: "역번역" },
   { href: "/weakness", label: "약점" },
-  { href: "/expressions", label: "표현장" },
+  { href: "/expressions", label: "어휘장" },
 ];
 
 const STEPS = [
@@ -28,8 +28,8 @@ const STEPS = [
   },
   {
     n: "3",
-    title: "표현 모으기",
-    desc: "마음에 든 네이티브 표현은 드래그 한 번으로 표현장에 쏙 담아요.",
+    title: "어휘 모으기",
+    desc: "진단이 뽑아준 단어·표현을 콜로케이션·유의어와 함께 어휘장에 담아요.",
   },
   {
     n: "4",
@@ -66,8 +66,8 @@ const FEATURES = [
   },
   {
     icon: "🗂️",
-    title: "표현장 · DEEPREAD 연동",
-    desc: "마음에 든 네이티브 표현을 모아 두고 다시 써보며 익혀요. 읽기 앱 DEEPREAD와 이어집니다.",
+    title: "어휘장 · DEEPREAD 연동",
+    desc: "단어·콜로케이션·유의어를 카드로 모아 복습해요. 읽기 앱 DEEPREAD와 이어집니다.",
   },
 ];
 

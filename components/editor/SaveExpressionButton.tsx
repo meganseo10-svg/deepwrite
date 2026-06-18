@@ -28,7 +28,7 @@ export function SaveExpressionButton({ expression }: { expression: string }) {
         {pending
           ? "저장 중…"
           : status === "saved"
-            ? "표현장에 저장됨 ✓"
+            ? "어휘장에 저장됨 ✓"
             : "표현 저장"}
       </Button>
       {status === "error" && (

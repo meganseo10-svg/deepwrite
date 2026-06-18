@@ -2,13 +2,15 @@ import { ScoreBars } from "./ScoreBars";
 import { DiffView } from "./DiffView";
 import { ExplanationCard } from "./ExplanationCard";
 import { SaveExpressionButton } from "./SaveExpressionButton";
+import { SaveVocabButton } from "./SaveVocabButton";
+import { VocabCard } from "./VocabCard";
 import { TONE_OPTIONS, type Tone } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { Analyze } from "@/lib/schemas/llm";
 
 export type AnalysisResult = Pick<
   Analyze,
-  "scores" | "rewrites" | "diff" | "explanations"
+  "scores" | "rewrites" | "diff" | "explanations" | "vocab"
 > & { writingId: string };
 
 const TONE_ACCENT: Record<Tone, string> = {
@@ -59,11 +61,24 @@ export function AnalysisPanel({ result }: { result: AnalysisResult }) {
         </div>
       </div>
 
+      {result.vocab && result.vocab.length > 0 && (
+        <div>
+          <h3 className="mb-2 text-sm font-semibold text-ink">
+            어휘 카드 ({result.vocab.length}) · 하나씩 어휘장에 담아 복습하세요
+          </h3>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {result.vocab.map((v, i) => (
+              <VocabCard key={i} item={v} action={<SaveVocabButton item={v} />} />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* 후속 액션: 네이티브 리라이트를 표현장에 저장 (3톤 비교는 좌측 패널 버튼) */}
       <div className="flex flex-wrap items-center gap-2 border-t border-line pt-3">
         <SaveExpressionButton expression={result.rewrites.neutral} />
         <span className="text-xs text-faint">
-          중립 리라이트를 표현장에 저장해 두고 다시 써보세요.
+          중립 리라이트를 어휘장에 저장해 두고 다시 써보세요.
         </span>
       </div>
     </div>

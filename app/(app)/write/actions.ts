@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import type { HintMode, Tone } from "@/lib/constants";
+import type { Vocab } from "@/lib/schemas/llm";
 
 // 톤·힌트모드 선택을 사용자 프로필 기본값으로 저장 (새로고침에도 유지).
 export async function updateWritingPrefs(tone: Tone, hintMode: HintMode) {
@@ -71,6 +72,28 @@ export async function saveExpression(expression: string, note?: string) {
     user_id: user.id,
     expression: text.slice(0, 4000),
     note: note?.trim() || null,
+    from_deepread: false,
+  });
+  if (error) return { error: error.message };
+  return { ok: true as const };
+}
+
+// 어휘 카드(진단이 뽑은 단어/표현)를 어휘장에 저장 (0006). expression=headword 로 채움.
+export async function saveVocab(item: Vocab) {
+  const headword = item.headword?.trim();
+  if (!headword) return { error: "빈 어휘는 저장할 수 없습니다." as const };
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "unauthenticated" as const };
+
+  const { error } = await supabase.from("saved_expressions").insert({
+    user_id: user.id,
+    expression: headword.slice(0, 4000), // not-null 충족 (목록 폴백 표시용)
+    headword: headword.slice(0, 200),
+    vocab: item,
     from_deepread: false,
   });
   if (error) return { error: error.message };
