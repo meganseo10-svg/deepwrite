@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { buttonClass } from "@/components/ui/Button";
 
 type Status = "confirming" | "error";
 
@@ -60,13 +60,14 @@ export function BillingConfirm({
       <p className="text-lg font-medium text-ink">결제를 완료하지 못했어요</p>
       <p className="mt-2 text-sm text-gold">{message}</p>
       <div className="mt-6 flex justify-center gap-2">
-        <Link href="/pricing">
-          <Button variant="secondary" size="sm">
-            요금제로 돌아가기
-          </Button>
+        <Link
+          href="/pricing"
+          className={buttonClass({ variant: "secondary", size: "sm" })}
+        >
+          요금제로 돌아가기
         </Link>
-        <Link href="/mypage">
-          <Button size="sm">마이페이지</Button>
+        <Link href="/mypage" className={buttonClass({ size: "sm" })}>
+          마이페이지
         </Link>
       </div>
     </div>

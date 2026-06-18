@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { buttonClass } from "@/components/ui/Button";
 import { WeaknessBar } from "@/components/weakness/WeaknessBar";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
@@ -36,8 +36,8 @@ export default async function WeaknessPage() {
               작문을 진단받으면 오류가 유형별로 쌓이고, 여기에서 랭킹·추이와
               맞춤 드릴을 볼 수 있어요.
             </p>
-            <Link href="/write" className="mt-4">
-              <Button size="sm">작문 진단받기</Button>
+            <Link href="/write" className={buttonClass({ size: "sm", className: "mt-4" })}>
+              작문 진단받기
             </Link>
           </CardBody>
         </Card>
@@ -99,13 +99,17 @@ export default async function WeaknessPage() {
                   )}
 
                   <div className="flex gap-2 pt-1">
-                    <Link href="/backtranslate">
-                      <Button size="sm">역번역으로 연습</Button>
+                    <Link
+                      href="/backtranslate"
+                      className={buttonClass({ size: "sm" })}
+                    >
+                      역번역으로 연습
                     </Link>
-                    <Link href="/write">
-                      <Button size="sm" variant="secondary">
-                        작문하기
-                      </Button>
+                    <Link
+                      href="/write"
+                      className={buttonClass({ size: "sm", variant: "secondary" })}
+                    >
+                      작문하기
                     </Link>
                   </div>
                 </>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
+import { buttonClass } from "@/components/ui/Button";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/Card";
 import { ScoreBars } from "@/components/editor/ScoreBars";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -69,8 +69,8 @@ export default async function DashboardPage() {
             )}
           </p>
         </div>
-        <Link href="/write">
-          <Button>새 작문 시작</Button>
+        <Link href="/write" className={buttonClass()}>
+          새 작문 시작
         </Link>
       </div>
 
@@ -86,8 +86,8 @@ export default async function DashboardPage() {
                 짧은 글 3개로 추정 CEFR과 최약점을 잡아 드립니다.
               </p>
             </div>
-            <Link href="/onboarding">
-              <Button size="sm">온보딩 진단</Button>
+            <Link href="/onboarding" className={buttonClass({ size: "sm" })}>
+              온보딩 진단
             </Link>
           </CardBody>
         </Card>
@@ -110,13 +110,14 @@ export default async function DashboardPage() {
                   에 집중해 한 편 써보세요.
                 </p>
                 <div className="mt-3 flex gap-2">
-                  <Link href="/write">
-                    <Button size="sm">작문하기</Button>
+                  <Link href="/write" className={buttonClass({ size: "sm" })}>
+                    작문하기
                   </Link>
-                  <Link href="/backtranslate">
-                    <Button size="sm" variant="secondary">
-                      역번역
-                    </Button>
+                  <Link
+                    href="/backtranslate"
+                    className={buttonClass({ size: "sm", variant: "secondary" })}
+                  >
+                    역번역
                   </Link>
                 </div>
               </>

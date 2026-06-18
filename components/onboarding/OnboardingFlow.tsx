@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonClass } from "@/components/ui/Button";
 import { Card, CardBody } from "@/components/ui/Card";
 import { weaknessLabel } from "@/lib/constants";
 import type { Onboarding } from "@/lib/schemas/llm";
@@ -93,11 +93,11 @@ export function OnboardingFlow() {
             </p>
 
             <div className="flex justify-center gap-2 pt-1">
-              <Link href="/dashboard">
-                <Button>대시보드로</Button>
+              <Link href="/dashboard" className={buttonClass()}>
+                대시보드로
               </Link>
-              <Link href="/write">
-                <Button variant="secondary">바로 작문하기</Button>
+              <Link href="/write" className={buttonClass({ variant: "secondary" })}>
+                바로 작문하기
               </Link>
             </div>
           </CardBody>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonClass } from "@/components/ui/Button";
 
 // 전역 에러 바운더리 (런타임 오류 시). 기본 Next 에러 페이지 대체.
 export default function Error({
@@ -28,8 +28,8 @@ export default function Error({
       </p>
       <div className="mt-6 flex gap-2">
         <Button onClick={reset}>다시 시도</Button>
-        <a href="/dashboard">
-          <Button variant="secondary">대시보드로</Button>
+        <a href="/dashboard" className={buttonClass({ variant: "secondary" })}>
+          대시보드로
         </a>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { buttonClass } from "@/components/ui/Button";
 
 // 브랜드 404 (08 룩). 기본 Next 페이지 대체.
 export default function NotFound() {
@@ -10,8 +10,8 @@ export default function NotFound() {
       <p className="mt-2 text-sm text-soft">
         찾으시는 페이지가 없어요. 주소가 바뀌었거나 삭제됐을 수 있습니다.
       </p>
-      <Link href="/dashboard" className="mt-6">
-        <Button>대시보드로 가기</Button>
+      <Link href="/dashboard" className={buttonClass({ className: "mt-6" })}>
+        대시보드로 가기
       </Link>
     </div>
   );

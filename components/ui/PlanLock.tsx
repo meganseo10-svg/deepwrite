@@ -1,6 +1,7 @@
-import { Button } from "@/components/ui/Button";
+import Link from "next/link";
+import { buttonClass } from "@/components/ui/Button";
 
-// 게이트용 자물쇠 오버레이 (06 공통 컴포넌트). 결제는 T14.
+// 게이트용 자물쇠 오버레이 (06 공통 컴포넌트). 업그레이드 → 요금제 페이지.
 export function PlanLock({
   feature,
   onClose,
@@ -27,15 +28,9 @@ export function PlanLock({
       <p className="mt-0.5 text-xs text-soft">
         Pro로 업그레이드하면 사용할 수 있어요.
       </p>
-      <Button
-        size="sm"
-        variant="secondary"
-        className="mt-2"
-        disabled
-        title="결제는 T14에서 연결"
-      >
+      <Link href="/pricing" className={buttonClass({ size: "sm", className: "mt-2" })}>
         Pro로 업그레이드
-      </Button>
+      </Link>
     </div>
   );
 }

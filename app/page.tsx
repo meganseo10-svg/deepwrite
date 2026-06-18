@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { buttonClass } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card, CardBody } from "@/components/ui/Card";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -124,8 +124,8 @@ export default async function LandingPage() {
             {loggedIn ? (
               <HeaderMenu email={email} navItems={NAV} isAdmin={isAdmin} />
             ) : (
-              <Link href="/login">
-                <Button size="sm">로그인</Button>
+              <Link href="/login" className={buttonClass({ size: "sm" })}>
+                로그인
               </Link>
             )}
           </nav>
@@ -165,18 +165,19 @@ export default async function LandingPage() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             {loggedIn ? (
               <>
-                <Link href="/write">
-                  <Button className="px-7">새 작문 시작</Button>
+                <Link href="/write" className={buttonClass({ className: "px-7" })}>
+                  새 작문 시작
                 </Link>
-                <Link href="/dashboard">
-                  <Button variant="secondary" className="px-6">
-                    대시보드로 가기
-                  </Button>
+                <Link
+                  href="/dashboard"
+                  className={buttonClass({ variant: "secondary", className: "px-6" })}
+                >
+                  대시보드로 가기
                 </Link>
               </>
             ) : (
-              <Link href="/login">
-                <Button className="px-7">{ctaLabel}</Button>
+              <Link href="/login" className={buttonClass({ className: "px-7" })}>
+                {ctaLabel}
               </Link>
             )}
           </div>
@@ -307,13 +308,14 @@ export default async function LandingPage() {
             <p className="mx-auto mt-2 max-w-md text-sm text-white/85">
               짧은 글 3개로 내 영어의 베이스라인부터 진단해 드려요.
             </p>
-            <Link href={ctaHref} className="mt-6 inline-block">
-              <Button
-                variant="secondary"
-                className="border-transparent px-6 text-ink"
-              >
-                {loggedIn ? "대시보드로 가기" : "새 작문 시작"}
-              </Button>
+            <Link
+              href={ctaHref}
+              className={buttonClass({
+                variant: "secondary",
+                className: "mt-6 border-transparent px-6 text-ink",
+              })}
+            >
+              {loggedIn ? "대시보드로 가기" : "새 작문 시작"}
             </Link>
           </div>
         </section>
