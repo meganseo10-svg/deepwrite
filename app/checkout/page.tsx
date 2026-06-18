@@ -25,7 +25,10 @@ export default async function CheckoutPage({
     data: { user },
   } = await supabase.auth.getUser();
   // proxy 가 이미 보호하지만 방어적으로 한 번 더.
-  if (!user) redirect(`/login?redirectTo=/checkout?plan=${plan}`);
+  if (!user)
+    redirect(
+      `/login?redirectTo=${encodeURIComponent(`/checkout?plan=${plan}`)}`,
+    );
 
   const { data: profile } = await supabase
     .from("profiles")
