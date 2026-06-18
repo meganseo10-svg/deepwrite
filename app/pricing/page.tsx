@@ -77,6 +77,7 @@ const PLANS: Plan[] = [
 export default async function PricingPage() {
   let email: string | null = null;
   let isAdmin = false;
+  let currentPlan = "free";
   if (isSupabaseConfigured) {
     const supabase = await createClient();
     const {
@@ -84,6 +85,14 @@ export default async function PricingPage() {
     } = await supabase.auth.getUser();
     email = user?.email ?? null;
     isAdmin = isAdminEmail(email);
+    if (user) {
+      const { data } = await supabase
+        .from("profiles")
+        .select("plan")
+        .eq("id", user.id)
+        .maybeSingle();
+      currentPlan = data?.plan ?? "free";
+    }
   }
   const loggedIn = !!email;
 
@@ -161,7 +170,17 @@ export default async function PricingPage() {
               </ul>
 
               <div className="mt-5">
-                {p.key === "free" ? (
+                {loggedIn && p.key === currentPlan ? (
+                  <span
+                    className={buttonClass({
+                      variant: "secondary",
+                      className: "w-full cursor-default opacity-60",
+                    })}
+                    aria-disabled="true"
+                  >
+                    현재 이용 중
+                  </span>
+                ) : p.key === "free" ? (
                   <Link
                     href={loggedIn ? "/write" : "/login"}
                     className={buttonClass({
