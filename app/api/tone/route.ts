@@ -6,6 +6,7 @@ import { SYSTEM_TONE, userTone } from "@/lib/llm/prompts";
 import { ToneRequestSchema, ToneSchema, type ToneResult } from "@/lib/schemas/llm";
 import { apiError } from "@/lib/http";
 import { isUserPro } from "@/lib/plan";
+import { kstDayStartIso } from "@/lib/metrics";
 
 // 3톤 동시 변환 (§2). pro+ 무제한 / free·basic 은 하루 1회 미리보기.
 // 입력이 사용자 글이므로 analyze 와 동일하게 캐시 미사용(04 개인정보 규칙).
@@ -31,14 +32,13 @@ export async function POST(req: Request) {
   // 플랜 게이트: pro+ 무제한, 그 외는 하루 1회 미리보기
   const pro = await isUserPro(supabase, user.id);
   if (!pro) {
-    const since = new Date();
-    since.setHours(0, 0, 0, 0);
+    // 미리보기 한도는 KST 자정 기준(streak 로직과 통일)
     const { count } = await supabase
       .from("usage_events")
       .select("id", { count: "exact", head: true })
       .eq("user_id", user.id)
       .eq("feature", FEATURE)
-      .gte("created_at", since.toISOString());
+      .gte("created_at", kstDayStartIso());
     if ((count ?? 0) >= 1)
       return apiError(
         "PLAN_REQUIRED",

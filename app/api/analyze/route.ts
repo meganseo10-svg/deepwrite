@@ -5,6 +5,7 @@ import { MODELS } from "@/lib/llm/anthropic";
 import { SYSTEM_ANALYZE, userAnalyze } from "@/lib/llm/prompts";
 import { AnalyzeRequestSchema, AnalyzeSchema } from "@/lib/schemas/llm";
 import { apiError } from "@/lib/http";
+import { kstDayStartIso } from "@/lib/metrics";
 
 const FREE_DAILY_LIMIT = 3; // 05: free=일 3회 / basic+=무제한
 
@@ -34,13 +35,12 @@ export async function POST(req: Request) {
     .maybeSingle();
   const plan = profile?.plan ?? "free";
   if (plan === "free") {
-    const since = new Date();
-    since.setHours(0, 0, 0, 0);
+    // 일일 한도는 KST 자정 기준(streak 로직과 통일)
     const { count } = await supabase
       .from("writings")
       .select("id", { count: "exact", head: true })
       .eq("user_id", user.id)
-      .gte("created_at", since.toISOString());
+      .gte("created_at", kstDayStartIso());
     if ((count ?? 0) >= FREE_DAILY_LIMIT)
       return apiError(
         "RATE_LIMIT",

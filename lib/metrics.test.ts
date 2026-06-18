@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { kstDay, computeStreak, trendPct } from "./metrics";
+import { kstDay, kstDayStartIso, computeStreak, trendPct } from "./metrics";
 
 // 2026-06-17 03:00 UTC = 12:00 KST → 오늘(KST) = 2026-06-17
 const NOW = Date.UTC(2026, 5, 17, 3, 0, 0);
@@ -10,6 +10,19 @@ describe("kstDay", () => {
     expect(kstDay("2026-06-16T01:00:00Z")).toBe("2026-06-16"); // +9h=10:00
     // 자정 경계: 16일 20시 UTC = 17일 05시 KST
     expect(kstDay("2026-06-16T20:00:00Z")).toBe("2026-06-17");
+  });
+});
+
+describe("kstDayStartIso", () => {
+  it("KST 자정에 해당하는 UTC instant 반환 (전날 15:00Z)", () => {
+    // 2026-06-17 03:00 UTC(=12:00 KST) → KST 자정 = 2026-06-17 00:00 KST = 2026-06-16 15:00 UTC
+    expect(kstDayStartIso(NOW)).toBe("2026-06-16T15:00:00.000Z");
+  });
+  it("KST 자정 직후/직전이 같은 일자 시작을 가리킴", () => {
+    const justAfter = Date.UTC(2026, 5, 16, 15, 0, 1); // KST 00:00:01
+    const justBefore = Date.UTC(2026, 5, 16, 14, 59, 59); // KST 23:59:59 전날
+    expect(kstDayStartIso(justAfter)).toBe("2026-06-16T15:00:00.000Z");
+    expect(kstDayStartIso(justBefore)).toBe("2026-06-15T15:00:00.000Z");
   });
 });
 

@@ -10,6 +10,14 @@ export function kstDay(at: string | number): string {
   return new Date(t + KST_OFFSET_MS).toISOString().slice(0, 10);
 }
 
+// 주어진 시각이 속한 KST 일자의 시작(KST 자정)에 해당하는 UTC instant(ISO).
+// 무료 일일 게이트(진단 3회·미리보기 1회)를 KST 자정 기준으로 카운트할 때 사용
+// — 서버(UTC) 자정으로 세면 한국 사용자 쿼터가 오전 9시에 리셋되는 문제 해소.
+export function kstDayStartIso(nowMs: number = Date.now()): string {
+  const kstMidnight = Math.floor((nowMs + KST_OFFSET_MS) / DAY_MS) * DAY_MS;
+  return new Date(kstMidnight - KST_OFFSET_MS).toISOString();
+}
+
 // 연속 작성일: 오늘(작성 없으면 어제)부터 거꾸로 이어지는 KST 일자 수.
 export function computeStreak(
   timestamps: string[],
