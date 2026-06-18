@@ -118,6 +118,14 @@ export function BacktranslateTrainer({ isPro }: { isPro: boolean }) {
         </Button>
       </div>
 
+      {/* 흐름 안내 — 통역식 역번역 훈련 */}
+      <p className="text-sm leading-relaxed text-soft">
+        제시된 <span className="font-medium text-ink">한국어 의도</span>를 영어로
+        옮기면, 그 영어를 다시 한국어로 직역해 보여드려요. 내 영어가 원래 의도를
+        제대로 전달했는지 <span className="font-medium text-ink">일치도</span>로
+        확인하는 통역대학원식 훈련이에요.
+      </p>
+
       {/* 제시된 한국어 의도 */}
       <Card>
         <CardBody className="pt-5">
