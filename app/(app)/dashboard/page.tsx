@@ -192,36 +192,46 @@ export default async function DashboardPage() {
 
       {/* 최근 작문 */}
       <Card>
-        <CardHeader>
+        <CardHeader className="flex items-center justify-between">
           <CardTitle>최근 작문</CardTitle>
+          {data.recent.length > 0 && (
+            <Link
+              href="/writings"
+              className="text-xs font-medium text-ox-dark hover:underline"
+            >
+              전체 보기 →
+            </Link>
+          )}
         </CardHeader>
         <CardBody>
           {data.recent.length > 0 ? (
             <ul className="divide-y divide-line">
               {data.recent.map((w) => (
-                <li
-                  key={w.id}
-                  className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0"
-                >
-                  <span className="w-10 shrink-0 text-xs text-faint">
-                    {fmtDate(w.created_at)}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-1.5">
-                      <Badge>{toneLabel(w.target_tone)}</Badge>
-                      {w.genre && (
-                        <span className="text-xs text-faint">{w.genre}</span>
-                      )}
-                    </div>
-                    <p className="mt-0.5 truncate text-sm text-soft">
-                      {w.preview || "—"}
-                    </p>
-                  </div>
-                  {w.avg !== null && (
-                    <span className="shrink-0 text-sm font-semibold text-ink">
-                      {w.avg}
+                <li key={w.id}>
+                  <Link
+                    href={`/writings/${w.id}`}
+                    className="-mx-2 flex items-center gap-3 rounded-btn px-2 py-2.5 hover:bg-paper2"
+                  >
+                    <span className="w-10 shrink-0 text-xs text-faint">
+                      {fmtDate(w.created_at)}
                     </span>
-                  )}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5">
+                        <Badge>{toneLabel(w.target_tone)}</Badge>
+                        {w.genre && (
+                          <span className="text-xs text-faint">{w.genre}</span>
+                        )}
+                      </div>
+                      <p className="mt-0.5 truncate text-sm text-soft">
+                        {w.preview || "—"}
+                      </p>
+                    </div>
+                    {w.avg !== null && (
+                      <span className="shrink-0 text-sm font-semibold text-ink">
+                        {w.avg}
+                      </span>
+                    )}
+                  </Link>
                 </li>
               ))}
             </ul>

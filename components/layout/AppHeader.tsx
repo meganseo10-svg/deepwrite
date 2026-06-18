@@ -7,6 +7,7 @@ import { HeaderMenu } from "@/components/layout/HeaderMenu";
 
 const NAV = [
   { href: "/write", label: "작문" },
+  { href: "/writings", label: "기록" },
   { href: "/backtranslate", label: "역번역" },
   { href: "/expressions", label: "표현장" },
   { href: "/weakness", label: "약점" },

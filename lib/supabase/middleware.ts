@@ -6,6 +6,7 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL, isSupabaseConfigured } from "./config"
 const PROTECTED_PREFIXES = [
   "/dashboard",
   "/write",
+  "/writings",
   "/backtranslate",
   "/weakness",
   "/onboarding",
