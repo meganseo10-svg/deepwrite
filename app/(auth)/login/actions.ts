@@ -44,6 +44,7 @@ export async function signUp(
 ): Promise<AuthState> {
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
+  const redirectTo = sanitizeRedirect(formData.get("redirectTo"));
 
   if (password.length < 6)
     return { error: "비밀번호는 6자 이상이어야 합니다." };
@@ -52,8 +53,8 @@ export async function signUp(
   const { data, error } = await supabase.auth.signUp({ email, password });
   if (error) return { error: error.message };
 
-  // 이메일 확인이 꺼져 있으면 세션이 바로 생성됨 → 대시보드로.
-  if (data.session) redirect("/dashboard");
+  // 이메일 확인이 꺼져 있으면 세션이 바로 생성됨 → 원래 목적지로(없으면 /dashboard).
+  if (data.session) redirect(redirectTo);
 
   return {
     message: "확인 메일을 보냈습니다. 메일의 링크를 눌러 가입을 완료하세요.",

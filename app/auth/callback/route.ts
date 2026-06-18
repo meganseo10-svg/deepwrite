@@ -6,8 +6,11 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const redirectToParam = searchParams.get("redirectTo");
+  // 오픈 리다이렉트 방지: 같은 사이트 경로만 허용 (`//host` 프로토콜-상대 URL 차단).
   const redirectTo =
-    redirectToParam && redirectToParam.startsWith("/")
+    redirectToParam &&
+    redirectToParam.startsWith("/") &&
+    !redirectToParam.startsWith("//")
       ? redirectToParam
       : "/dashboard";
 
